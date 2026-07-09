@@ -1,0 +1,249 @@
+[
+  {
+    "_id": "lesson_solar_system_v1",
+    "collection": "lesson_contents",
+    "lessonSlug": "solar-system",
+    "title": "The Solar System",
+    "subject": "Science",
+    "gradeLevel": "8",
+    "language": "en",
+    "source": {
+      "type": "textbook",
+      "text": "The Solar System is the gravitationally bound system of the Sun and the objects that orbit it. It formed 4.6 billion years ago from the gravitational collapse of a giant interstellar molecular cloud. The four inner planets are rocky, while the outer planets are gas and ice giants.",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://images.unsplash.com/photo-1464802686167-b939a6910659",
+          "alt": "A star-filled view of space representing the solar system."
+        }
+      ]
+    },
+    "segments": [
+      {
+        "id": "intro",
+        "heading": "What is the Solar System?",
+        "sourceText": "The Solar System includes the Sun and all objects that orbit it."
+      },
+      {
+        "id": "inner-planets",
+        "heading": "The Inner Planets",
+        "sourceText": "Mercury, Venus, Earth, and Mars are rocky inner planets with solid surfaces."
+      },
+      {
+        "id": "outer-planets",
+        "heading": "The Outer Planets",
+        "sourceText": "Jupiter and Saturn are gas giants. Uranus and Neptune are ice giants."
+      }
+    ],
+    "adaptiveVariants": {
+      "typical": {
+        "layout": "standard",
+        "content": [
+          "The Solar System is made of the Sun and the objects that orbit it.",
+          "It formed about 4.6 billion years ago.",
+          "The inner planets are Mercury, Venus, Earth, and Mars.",
+          "The outer planets are Jupiter, Saturn, Uranus, and Neptune."
+        ]
+      },
+      "blind": {
+        "layout": "screen-reader-structured",
+        "content": [
+          "The Solar System is the Sun and all objects moving around it.",
+          "Image description: A star-filled space view represents the solar system.",
+          "The four inner planets are rocky planets.",
+          "The four outer planets are large gas or ice planets."
+        ]
+      },
+      "low-vision": {
+        "layout": "free-flow-high-contrast",
+        "content": [
+          "The Solar System is the Sun and all objects moving around it.",
+          "Use magnification or high-contrast display while reading.",
+          "Inner planets: Mercury, Venus, Earth, Mars.",
+          "Outer planets: Jupiter, Saturn, Uranus, Neptune."
+        ]
+      },
+      "deaf": {
+        "layout": "short-visual",
+        "content": [
+          "The Sun is at the center.",
+          "Eight planets move around the Sun.",
+          "Inner planets are rocky.",
+          "Outer planets are gas or ice giants."
+        ],
+        "vocabularyLinks": [
+          {
+            "word": "orbit",
+            "definition": "To move around another object in space."
+          }
+        ]
+      },
+      "dyslexic": {
+        "layout": "bulleted-high-spacing",
+        "content": [
+          "The Sun is in the center.",
+          "There are 8 planets.",
+          "Inner planets are made mostly of rock.",
+          "Outer planets are very large."
+        ]
+      },
+      "id": {
+        "layout": "simple-picture-first",
+        "content": [
+          "The Sun is a big star.",
+          "Earth is a planet.",
+          "We live on Earth."
+        ]
+      },
+      "adhd-autism": {
+        "layout": "step-by-step-low-distraction",
+        "steps": [
+          {
+            "title": "The Sun",
+            "content": "The Sun is a star."
+          },
+          {
+            "title": "Planets",
+            "content": "Planets move around the Sun."
+          },
+          {
+            "title": "Earth",
+            "content": "Earth is our home planet."
+          }
+        ]
+      }
+    },
+    "adaptationLog": [
+      {
+        "profile": "dyslexic",
+        "operation": "Converted paragraph content to spaced bullet points.",
+        "createdAt": "2026-05-20T00:00:00.000Z"
+      },
+      {
+        "profile": "deaf",
+        "operation": "Simplified content to short visual statements and vocabulary links.",
+        "createdAt": "2026-05-20T00:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "_id": "lesson_fractions_basics_v1",
+    "collection": "lesson_contents",
+    "lessonSlug": "fractions-basics",
+    "title": "Fractions Basics",
+    "subject": "Mathematics",
+    "gradeLevel": "8",
+    "language": "en",
+    "source": {
+      "type": "teacher-upload",
+      "text": "A fraction shows a part of a whole. The numerator tells how many parts are selected. The denominator tells how many equal parts the whole is divided into. Equivalent fractions represent the same value even when the numerator and denominator are different.",
+      "media": [
+        {
+          "type": "image",
+          "url": "/assets/fractions-circle.png",
+          "alt": "A circle divided into four equal parts with one part shaded."
+        }
+      ]
+    },
+    "segments": [
+      {
+        "id": "meaning",
+        "heading": "Meaning of a Fraction",
+        "sourceText": "A fraction shows a part of a whole."
+      },
+      {
+        "id": "numerator-denominator",
+        "heading": "Numerator and Denominator",
+        "sourceText": "The numerator is the top number. The denominator is the bottom number."
+      },
+      {
+        "id": "equivalent",
+        "heading": "Equivalent Fractions",
+        "sourceText": "Equivalent fractions look different but have the same value."
+      }
+    ],
+    "adaptiveVariants": {
+      "typical": {
+        "layout": "standard",
+        "content": [
+          "A fraction is a number that shows part of a whole.",
+          "The numerator is the top number.",
+          "The denominator is the bottom number.",
+          "Equivalent fractions have the same value."
+        ]
+      },
+      "blind": {
+        "layout": "screen-reader-structured",
+        "content": [
+          "A fraction describes a part of a whole.",
+          "Image description: One of four equal circle parts is shaded.",
+          "The top number is called the numerator.",
+          "The bottom number is called the denominator."
+        ]
+      },
+      "low-vision": {
+        "layout": "free-flow-high-contrast",
+        "content": [
+          "Fraction = part of a whole.",
+          "Top number = numerator.",
+          "Bottom number = denominator.",
+          "Use large diagrams and high contrast."
+        ]
+      },
+      "deaf": {
+        "layout": "short-visual",
+        "content": [
+          "A fraction shows part of something.",
+          "Top number: selected parts.",
+          "Bottom number: total equal parts."
+        ],
+        "vocabularyLinks": [
+          {
+            "word": "equivalent",
+            "definition": "Equal in value."
+          }
+        ]
+      },
+      "dyslexic": {
+        "layout": "bulleted-high-spacing",
+        "content": [
+          "Fraction means part of a whole.",
+          "Numerator is on top.",
+          "Denominator is at the bottom.",
+          "Equivalent means same value."
+        ]
+      },
+      "id": {
+        "layout": "simple-picture-first",
+        "content": [
+          "A fraction is a part.",
+          "One piece of a pizza is a fraction."
+        ]
+      },
+      "adhd-autism": {
+        "layout": "step-by-step-low-distraction",
+        "steps": [
+          {
+            "title": "Look",
+            "content": "See how many equal parts are in the whole."
+          },
+          {
+            "title": "Count",
+            "content": "Count how many parts are selected."
+          },
+          {
+            "title": "Write",
+            "content": "Selected parts go on top. Total parts go at the bottom."
+          }
+        ]
+      }
+    },
+    "adaptationLog": [
+      {
+        "profile": "low-vision",
+        "operation": "Added high-contrast guidance and shorter visual text.",
+        "createdAt": "2026-05-20T00:00:00.000Z"
+      }
+    ]
+  }
+]

@@ -4,13 +4,13 @@
 WITH inserted_users AS (
   INSERT INTO users (id, username, email, password_hash, first_name, last_name, role)
   VALUES
-    ('00000000-0000-0000-0000-000000000001', 'aarav', 'student@school.edu', 'demo-hash', 'Aarav', 'Patel', 'student'),
-    ('00000000-0000-0000-0000-000000000002', 'arjun', 'teacher@school.edu', 'demo-hash', 'Arjun', 'Sharma', 'teacher'),
-    ('00000000-0000-0000-0000-000000000003', 'admin', 'admin@laams.edu', 'demo-hash', 'System', 'Admin', 'admin'),
-    ('00000000-0000-0000-0000-000000000004', 'rahul', 'parent@home.com', 'demo-hash', 'Rahul', 'Patel', 'parent'),
-    ('00000000-0000-0000-0000-000000000005', 'maya', 'maya@school.edu', 'demo-hash', 'Maya', 'Singh', 'student'),
-    ('00000000-0000-0000-0000-000000000006', 'rohan', 'rohan@school.edu', 'demo-hash', 'Rohan', 'Das', 'student'),
-    ('00000000-0000-0000-0000-000000000007', 'priya', 'priya@school.edu', 'demo-hash', 'Priya', 'Sharma', 'student')
+    ('00000000-0000-0000-0000-000000000001', 'aarav', 'student@school.edu', '$2a$10$wpKtzzSRHYSs8stViWrYae.KiTbd.AYv5lfQKs6U3WmT.YdzDH.ze', 'Aarav', 'Patel', 'student'),
+    ('00000000-0000-0000-0000-000000000002', 'arjun', 'teacher@school.edu', '$2a$10$wpKtzzSRHYSs8stViWrYae.KiTbd.AYv5lfQKs6U3WmT.YdzDH.ze', 'Arjun', 'Sharma', 'teacher'),
+    ('00000000-0000-0000-0000-000000000003', 'admin', 'admin@laams.edu', '$2a$10$wpKtzzSRHYSs8stViWrYae.KiTbd.AYv5lfQKs6U3WmT.YdzDH.ze', 'System', 'Admin', 'admin'),
+    ('00000000-0000-0000-0000-000000000004', 'rahul', 'parent@home.com', '$2a$10$wpKtzzSRHYSs8stViWrYae.KiTbd.AYv5lfQKs6U3WmT.YdzDH.ze', 'Rahul', 'Patel', 'parent'),
+    ('00000000-0000-0000-0000-000000000005', 'maya', 'maya@school.edu', '$2a$10$wpKtzzSRHYSs8stViWrYae.KiTbd.AYv5lfQKs6U3WmT.YdzDH.ze', 'Maya', 'Singh', 'student'),
+    ('00000000-0000-0000-0000-000000000006', 'rohan', 'rohan@school.edu', '$2a$10$wpKtzzSRHYSs8stViWrYae.KiTbd.AYv5lfQKs6U3WmT.YdzDH.ze', 'Rohan', 'Das', 'student'),
+    ('00000000-0000-0000-0000-000000000007', 'priya', 'priya@school.edu', '$2a$10$wpKtzzSRHYSs8stViWrYae.KiTbd.AYv5lfQKs6U3WmT.YdzDH.ze', 'Priya', 'Sharma', 'student')
   ON CONFLICT (email) DO UPDATE SET
     username = EXCLUDED.username,
     first_name = EXCLUDED.first_name,

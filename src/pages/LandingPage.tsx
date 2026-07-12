@@ -8,8 +8,8 @@ export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [email, setEmail] = useState('teacher@school.edu');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {

@@ -18,8 +18,12 @@ export const LandingPage: React.FC = () => {
     setError('');
     
     try {
-      await login(email, password);
-      navigate('/dashboard');
+      const res = await login(email, password);
+      if (res && res.requirePasswordSetup) {
+        navigate('/login', { state: { email, requirePasswordSetup: true, userId: res.userId } });
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to login');
       setIsSubmitting(false);

@@ -1,13 +1,13 @@
 import type { User } from '../types';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3001').trim();
 
 
 
 
 
 export const authService = {
-  login: async (email: string, password?: string): Promise<{ user: User; token: string }> => {
+  login: async (email: string, password?: string): Promise<{ user?: User; token?: string; requirePasswordSetup?: boolean; userId?: string; email?: string }> => {
     const response = await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -20,6 +20,29 @@ export const authService = {
     }
     
     const data = await response.json();
+    if (data.requirePasswordSetup) {
+      return data;
+    }
+    
+    localStorage.setItem('laams_jwt_token', data.token);
+    localStorage.setItem('laams_user_data', JSON.stringify(data.user));
+    return { user: data.user, token: data.token };
+  },
+  setupPassword: async (userId: string, password?: string): Promise<{ user: User; token: string }> => {
+    const response = await fetch(`${API_URL}/users/setup-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, password })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || 'Failed to setup password');
+    }
+
+    const data = await response.json();
+    localStorage.setItem('laams_jwt_token', data.token);
+    localStorage.setItem('laams_user_data', JSON.stringify(data.user));
     return { user: data.user, token: data.token };
   },
   getCurrentUser: async (token: string): Promise<User | null> => {

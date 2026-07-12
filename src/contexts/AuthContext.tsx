@@ -6,7 +6,8 @@ interface AuthContextType {
   user: User | null;
   role: UserRole | null;
   isAuthenticated: boolean;
-  login: (email: string, password?: string) => Promise<void>;
+  login: (email: string, password?: string) => Promise<any>;
+  setupPassword: (userId: string, password?: string) => Promise<void>;
   register: (userData: Omit<User, 'id'> & { password?: string }) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
@@ -72,12 +73,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (email: string, password?: string) => {
+    const res = await authService.login(email, password);
+    if (res.requirePasswordSetup) {
+      return res;
+    }
+    if (res.user && res.token) {
+      setUser(res.user);
+      localStorage.setItem('laams_jwt_token', res.token);
+      localStorage.setItem('laams_user_data', JSON.stringify(res.user));
+    }
+    return res;
+  };
+
+  const setupPassword = async (userId: string, password?: string) => {
     try {
-      const { user: newUser, token } = await authService.login(email, password);
+      const { user: newUser, token } = await authService.setupPassword(userId, password);
       setUser(newUser);
       localStorage.setItem('laams_jwt_token', token);
       localStorage.setItem('laams_user_data', JSON.stringify(newUser));
-      // In a real app we'd also store token securely (e.g. HttpOnly cookies or memory)
     } catch (error) {
       throw error;
     }
@@ -105,6 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       role: user?.role || null, 
       isAuthenticated: !!user, 
       login, 
+      setupPassword,
       register: registerUser,
       logout,
       isLoading

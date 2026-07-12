@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { BookOpen, LogIn, ArrowLeft, Loader2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const location = useLocation();
+  const { login, setupPassword } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(location.state?.email || '');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [resetSent, setResetSent] = useState(false);
+
+  // Onboarding states
+  const [requireSetup, setRequireSetup] = useState(location.state?.requirePasswordSetup || false);
+  const [setupUserId, setSetupUserId] = useState(location.state?.userId || '');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,10 +26,45 @@ export const Login: React.FC = () => {
     setError('');
     
     try {
-      await login(email, password);
-      navigate('/dashboard');
+      const res = await login(email, password);
+      if (res && res.requirePasswordSetup) {
+        setRequireSetup(true);
+        setSetupUserId(res.userId);
+        setIsSubmitting(false);
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to login');
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSetupPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    
+    if (!newPassword) {
+      setError('Please enter a password');
+      return;
+    }
+    
+    if (newPassword.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+    
+    if (newPassword !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    try {
+      await setupPassword(setupUserId, newPassword);
+      navigate('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Failed to setup password');
       setIsSubmitting(false);
     }
   };
@@ -74,76 +116,133 @@ export const Login: React.FC = () => {
             </div>
           )}
 
-          <form className="space-y-5" onSubmit={handleLogin}>
-            <div className="focus-glow rounded-xl border theme-border transition-all">
-              <div className="px-4 py-2 bg-white/50 dark:bg-gray-950/20 rounded-xl">
-                <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-primary mb-1">
-                  Email address
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  className="w-full bg-transparent border-none p-0 focus:ring-0 outline-none theme-text text-sm"
-                />
-              </div>
-            </div>
-
-            <div className="focus-glow rounded-xl border theme-border transition-all">
-              <div className="px-4 py-2 bg-white/50 dark:bg-gray-950/20 rounded-xl">
-                <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-primary mb-1">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-transparent border-none p-0 focus:ring-0 outline-none theme-text text-sm"
-                  placeholder="••••••••"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between px-1">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded cursor-pointer"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm theme-text-muted font-medium select-none cursor-pointer">
-                  Remember me
-                </label>
+          {requireSetup ? (
+            <form className="space-y-5" onSubmit={handleSetupPassword}>
+              <div className="text-center mb-2">
+                <p className="text-sm theme-text-muted">
+                  Welcome! Since this is your first time signing in, please create a password for your account.
+                </p>
               </div>
 
-              <div className="text-sm">
-                <button type="button" onClick={handleForgotPassword} className="font-semibold text-primary hover:underline">
-                  Forgot your password?
-                </button>
+              <div className="focus-glow rounded-xl border theme-border transition-all">
+                <div className="px-4 py-2 bg-white/50 dark:bg-gray-950/20 rounded-xl">
+                  <label htmlFor="newPassword" className="block text-xs font-bold uppercase tracking-wider text-primary mb-1">
+                    New Password
+                  </label>
+                  <input
+                    id="newPassword"
+                    name="newPassword"
+                    type="password"
+                    required
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full bg-transparent border-none p-0 focus:ring-0 outline-none theme-text text-sm"
+                    placeholder="••••••••"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="pt-2">
-              <Button type="submit" fullWidth className="gap-2 py-3" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
-                ) : (
-                  <LogIn className="w-5 h-5" aria-hidden="true" />
-                )}
-                {isSubmitting ? 'Signing in...' : 'Sign in'}
-              </Button>
-            </div>
-          </form>
+              <div className="focus-glow rounded-xl border theme-border transition-all">
+                <div className="px-4 py-2 bg-white/50 dark:bg-gray-950/20 rounded-xl">
+                  <label htmlFor="confirmPassword" className="block text-xs font-bold uppercase tracking-wider text-primary mb-1">
+                    Confirm New Password
+                  </label>
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    required
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full bg-transparent border-none p-0 focus:ring-0 outline-none theme-text text-sm"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Button type="submit" fullWidth className="gap-2 py-3" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+                  ) : (
+                    <LogIn className="w-5 h-5" aria-hidden="true" />
+                  )}
+                  {isSubmitting ? 'Saving password...' : 'Save Password & Sign In'}
+                </Button>
+              </div>
+            </form>
+          ) : (
+            <form className="space-y-5" onSubmit={handleLogin}>
+              <div className="focus-glow rounded-xl border theme-border transition-all">
+                <div className="px-4 py-2 bg-white/50 dark:bg-gray-950/20 rounded-xl">
+                  <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-primary mb-1">
+                    Email address
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="w-full bg-transparent border-none p-0 focus:ring-0 outline-none theme-text text-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="focus-glow rounded-xl border theme-border transition-all">
+                <div className="px-4 py-2 bg-white/50 dark:bg-gray-950/20 rounded-xl">
+                  <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-primary mb-1">
+                    Password
+                  </label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-transparent border-none p-0 focus:ring-0 outline-none theme-text text-sm"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center">
+                  <input
+                    id="remember-me"
+                    name="remember-me"
+                    type="checkbox"
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded cursor-pointer"
+                  />
+                  <label htmlFor="remember-me" className="ml-2 block text-sm theme-text-muted font-medium select-none cursor-pointer">
+                    Remember me
+                  </label>
+                </div>
+
+                <div className="text-sm">
+                  <button type="button" onClick={handleForgotPassword} className="font-semibold text-primary hover:underline">
+                    Forgot your password?
+                  </button>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Button type="submit" fullWidth className="gap-2 py-3" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+                  ) : (
+                    <LogIn className="w-5 h-5" aria-hidden="true" />
+                  )}
+                  {isSubmitting ? 'Signing in...' : 'Sign in'}
+                </Button>
+              </div>
+            </form>
+          )}
 
           <div className="mt-6">
             <Link to="/" className="flex items-center justify-center gap-2 text-sm theme-text-muted hover:text-primary transition-colors font-medium">

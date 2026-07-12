@@ -224,7 +224,7 @@ import i18n from '../i18n';
 export const adaptiveLearningService = {
   async adaptLesson(lesson: LessonContent, profile: AccessibilityProfile): Promise<AdaptedLesson> {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3001').trim();
       const response = await fetch(`${API_URL}/api/lessons/adapt`, {
         method: 'POST',
         headers: { 

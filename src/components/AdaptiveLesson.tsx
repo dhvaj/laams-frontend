@@ -97,7 +97,7 @@ const renderInlineMarkdown = (text: string, vocabulary: any[]): React.ReactNode 
             if (match) {
               const alt = match[1] || 'Image';
               const src = match[2];
-              const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+              const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3001').trim();
               const fullSrc = src.startsWith('http') || src.startsWith('data:') ? src : `${API_URL}${src}`;
               return (
                 <span key={index} className="block select-all my-3 max-w-sm mx-auto text-center">
@@ -209,7 +209,7 @@ const renderMarkdown = (text: string, vocabulary: any[]): React.ReactNode => {
         
         const alt = match[1];
         const src = match[2];
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+        const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3001').trim();
         const fullSrc = src.startsWith('http') || src.startsWith('data:') ? src : `${API_URL}${src}`;
         
         elements.push(
@@ -707,7 +707,7 @@ export const AdaptiveLesson: React.FC = () => {
             while ((match = imgRegex.exec(materialBody)) !== null) {
               const alt = match[1] || 'Image';
               const src = match[2];
-              const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+              const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3001').trim();
               const fullSrc = src.startsWith('http') || src.startsWith('data:') ? src : `${API_URL}${src}`;
               extractedMedia.push({
                 alt: alt,
@@ -902,7 +902,7 @@ export const AdaptiveLesson: React.FC = () => {
           <div className="flex gap-3">
             {lesson.fileUrl && !lesson.fileUrl.match(/\.(mp4|webm|ogg|mov|m4v|avi|mkv)$/i) && (
               <a 
-                href={`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}${lesson.fileUrl}`} 
+                href={`${(import.meta.env.VITE_API_URL || 'http://localhost:3001').trim()}${lesson.fileUrl}`} 
                 target="_blank" 
                 rel="noreferrer" 
                 onClick={() => dashboardService.trackAnalyticsEvent(lesson.id, 'content_downloaded', 1, { fileName: lesson.fileUrl })}
@@ -926,7 +926,7 @@ export const AdaptiveLesson: React.FC = () => {
           <div className="my-6 max-w-3xl mx-auto space-y-2">
             <h3 className="text-sm font-bold theme-text-muted uppercase tracking-wider">Lesson Video Material</h3>
             <video controls className="w-full rounded-2xl border theme-border shadow-lg bg-black aspect-video">
-              <source src={`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}${lesson.fileUrl}`} type="video/mp4" />
+              <source src={`${(import.meta.env.VITE_API_URL || 'http://localhost:3001').trim()}${lesson.fileUrl}`} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>

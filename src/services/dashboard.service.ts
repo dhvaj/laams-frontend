@@ -1,5 +1,5 @@
 import type { Assignment, Exam, ClassRoster, AccessibilityProfileStat, SystemStat, RegisteredUser, SubjectProgress, CalendarEvent, NewAssignment, User, ExamAttempt } from '../types';
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3001').trim();
 
 const getCurrentUserId = () => {
   try {

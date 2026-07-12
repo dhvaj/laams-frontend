@@ -38,9 +38,9 @@ export const Dashboard: React.FC = () => {
       case 'Settings': return 'settings';
       case 'My Classes': return 'lessons';
       case 'Content Hub': return 'library';
-      case 'User Management': return 'settings';
-      case 'Classes': return 'lessons';
-      case 'Compliance': return 'settings';
+      case 'User Management': return 'user_management';
+      case 'Classes': return 'classes';
+      case 'Compliance': return 'compliance';
       case 'Progress': return 'assignments';
       case 'Calendar': return 'exams';
       case 'Messages': return 'skills';

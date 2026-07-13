@@ -48,6 +48,10 @@ export const LandingPage: React.FC = () => {
             <a href="#features" className="theme-text-muted hover:text-primary transition-colors font-medium">Features</a>
           </nav>
           
+          <Link to="/register" className="flex items-center gap-2 px-4 py-2 rounded-lg border theme-border theme-text hover:bg-primary/10 font-medium transition-colors">
+            <span>Register</span>
+          </Link>
+
           <Link to="/login" className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 font-medium transition-colors">
             <User className="w-4 h-4" />
             <span>Login</span>

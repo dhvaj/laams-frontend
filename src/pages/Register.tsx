@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BookOpen, ArrowLeft, UserPlus, Loader2, ArrowRight, Check } from 'lucide-react';
 import { Button } from '../components/ui/Button';
@@ -46,6 +46,26 @@ export const Register: React.FC = () => {
   const [teacherDisabilityType, setTeacherDisabilityType] = useState('');
   const [address, setAddress] = useState('');
   const [emergencyContact, setEmergencyContact] = useState('');
+
+  // Accessibility screen reader focus management
+  useEffect(() => {
+    const focusTimeout = setTimeout(() => {
+      let element: HTMLElement | null = null;
+      if (step === 1) {
+        element = document.getElementById('firstName');
+      } else if (step === 2) {
+        element = role === 'student' ? document.getElementById('gradeLevel') : document.getElementById('subjectsTaught');
+      } else if (step === 3) {
+        element = role === 'student' ? document.getElementById('parentName') : document.getElementById('address');
+      }
+      
+      if (element) {
+        element.focus();
+      }
+    }, 150);
+
+    return () => clearTimeout(focusTimeout);
+  }, [step, role]);
 
   const disabilitiesList = [
     { value: 'blind', label: 'Visual Impairment / Blindness' },

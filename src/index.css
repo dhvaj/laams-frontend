@@ -34,6 +34,18 @@
   --glass-border: rgba(255, 255, 255, 0.3);
 }
 
+/* Dark Mode Variable Overrides */
+.dark, [data-theme="dark"] {
+  --bg-color: #0b0f19;
+  --surface-color: #111827;
+  --header-bg: #1f2937;
+  --text-color: #f9fafb;
+  --text-muted: #9ca3af;
+  --border-color: #374151;
+  --glass-bg: rgba(17, 24, 39, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
 /* Base body styles driven by variables */
 body {
   margin: 0;

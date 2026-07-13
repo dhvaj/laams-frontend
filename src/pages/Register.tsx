@@ -300,11 +300,11 @@ export const Register: React.FC = () => {
       </section>
 
       {/* RIGHT PANEL: Spacious Form Area */}
-      <section className="w-full lg:w-7/12 flex flex-col justify-center py-12 px-6 sm:px-12 xl:px-20 overflow-y-auto max-h-screen relative z-10 bg-slate-50/40 dark:bg-slate-950/20">
+      <section className="w-full lg:w-7/12 flex flex-col justify-center py-12 px-6 sm:px-12 xl:px-20 overflow-y-auto max-h-screen relative z-10 bg-gradient-to-br from-indigo-50/50 via-white to-purple-50/40 dark:from-slate-950 dark:via-slate-900/90 dark:to-indigo-950/40">
         
         {/* Glow blobs for background aesthetic (visible on mobile too) */}
-        <div className="lg:hidden absolute top-[-10%] right-[-10%] w-72 h-72 rounded-full bg-primary/10 blur-[80px]"></div>
-        <div className="absolute bottom-[-10%] left-[-10%] w-72 h-72 rounded-full bg-indigo-500/10 blur-[80px]"></div>
+        <div className="absolute top-[10%] right-[-5%] w-96 h-96 rounded-full bg-primary/5 dark:bg-primary/10 blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-[10%] left-[-5%] w-96 h-96 rounded-full bg-indigo-500/5 dark:bg-indigo-500/10 blur-[100px] pointer-events-none"></div>
 
         <div className="max-w-xl w-full mx-auto space-y-8 relative z-10">
           
@@ -314,7 +314,7 @@ export const Register: React.FC = () => {
               <BookOpen className="w-8 h-8 text-primary" aria-hidden="true" />
               <span className="text-2xl font-bold theme-text">LAAMS</span>
             </div>
-            <h2 className="text-3xl font-extrabold theme-text tracking-tight text-center lg:text-left">
+            <h2 className="text-3xl font-extrabold tracking-tight text-center lg:text-left bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-600 dark:from-primary dark:to-indigo-400">
               Create Your Account
             </h2>
             <p className="text-sm theme-text-muted text-center lg:text-left">
@@ -326,7 +326,7 @@ export const Register: React.FC = () => {
           </div>
 
           {/* Stepper Progress bar */}
-          <div className="flex justify-between items-center bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 p-4 rounded-2xl shadow-sm">
+          <div className="flex justify-between items-center bg-white/70 dark:bg-slate-900/60 border border-gray-200 dark:border-slate-800 p-4 rounded-2xl shadow-sm backdrop-blur-md">
             {[1, 2, 3].map((num) => (
               <div key={num} className="flex items-center">
                 <div className="flex items-center gap-2">
@@ -335,7 +335,7 @@ export const Register: React.FC = () => {
                       ? 'bg-primary text-white ring-4 ring-primary/20 scale-105 shadow-sm' 
                       : step > num 
                         ? 'bg-green-500 text-white' 
-                        : 'bg-slate-100 dark:bg-slate-800 theme-text-muted border border-gray-200 dark:border-slate-750'
+                        : 'bg-slate-50 dark:bg-slate-800 theme-text-muted border border-gray-200 dark:border-slate-750'
                   }`}>
                     {step > num ? <Check className="w-4 h-4" /> : num}
                   </div>
@@ -345,7 +345,7 @@ export const Register: React.FC = () => {
                 </div>
                 {num < 3 && (
                   <div className={`w-12 sm:w-20 h-0.5 mx-2 rounded-full transition-all duration-500 ${
-                    step > num ? 'bg-green-500' : 'bg-gray-250 dark:bg-gray-800'
+                    step > num ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-800'
                   }`} />
                 )}
               </div>
@@ -358,561 +358,563 @@ export const Register: React.FC = () => {
             </div>
           )}
 
-          <form onSubmit={handleRegister} className="space-y-6">
-            
-            {/* STEP 1: Basic Information */}
-            {step === 1 && (
-              <div className="space-y-6 animate-fade-in">
-                
-                {/* Premium Interactive Role Selection Cards */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-3.5">
-                    Account Type <span className="text-red-500">*</span>
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <button
-                      id="role-student"
-                      type="button"
-                      role="radio"
-                      aria-checked={role === 'student'}
-                      onClick={() => setRole('student')}
-                      className={`flex items-center gap-3.5 p-4 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
-                        role === 'student'
-                          ? 'border-primary bg-primary/5 dark:bg-primary/10 ring-2 ring-primary/30 scale-[1.01] shadow-sm'
-                          : 'border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-950'
-                      }`}
-                    >
-                      <GraduationCap className={`w-8 h-8 flex-shrink-0 ${role === 'student' ? 'text-primary' : 'theme-text-muted'}`} />
-                      <div>
-                        <span className="theme-text font-extrabold text-sm block">Student</span>
-                        <span className="text-[10px] theme-text-muted mt-0.5 block">Adaptive learning dashboard</span>
-                      </div>
-                    </button>
-                    
-                    <button
-                      id="role-teacher"
-                      type="button"
-                      role="radio"
-                      aria-checked={role === 'teacher'}
-                      onClick={() => setRole('teacher')}
-                      className={`flex items-center gap-3.5 p-4 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
-                        role === 'teacher'
-                          ? 'border-primary bg-primary/5 dark:bg-primary/10 ring-2 ring-primary/30 scale-[1.01] shadow-sm'
-                          : 'border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-950'
-                      }`}
-                    >
-                      <Users className={`w-8 h-8 flex-shrink-0 ${role === 'teacher' ? 'text-primary' : 'theme-text-muted'}`} />
-                      <div>
-                        <span className="theme-text font-extrabold text-sm block">Teacher</span>
-                        <span className="text-[10px] theme-text-muted mt-0.5 block">Reports & compliance logs</span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t theme-border pt-5">
-                  <div className="space-y-1.5">
-                    <label htmlFor="firstName" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      First Name <span className="text-red-500">*</span>
+          <div className="glass-panel p-8 sm:p-10 shadow-[0_20px_50px_rgba(170,59,255,0.05)] dark:shadow-[0_30px_70px_rgba(0,0,0,0.35)] border border-white/40 dark:border-white/5 rounded-3xl backdrop-blur-xl bg-white/70 dark:bg-slate-900/70">
+            <form onSubmit={handleRegister} className="space-y-6">
+              
+              {/* STEP 1: Basic Information */}
+              {step === 1 && (
+                <div className="space-y-6 animate-fade-in">
+                  
+                  {/* Premium Interactive Role Selection Cards */}
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-3.5">
+                      Account Type <span className="text-red-500">*</span>
                     </label>
-                    <input
-                      id="firstName"
-                      type="text"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="John"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-450"
-                    />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <button
+                        id="role-student"
+                        type="button"
+                        role="radio"
+                        aria-checked={role === 'student'}
+                        onClick={() => setRole('student')}
+                        className={`flex items-center gap-3.5 p-4 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
+                          role === 'student'
+                            ? 'border-primary bg-primary/5 dark:bg-primary/10 ring-2 ring-primary/30 scale-[1.01] shadow-sm'
+                            : 'border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-950'
+                        }`}
+                      >
+                        <GraduationCap className={`w-8 h-8 flex-shrink-0 ${role === 'student' ? 'text-primary' : 'theme-text-muted'}`} />
+                        <div>
+                          <span className="theme-text font-extrabold text-sm block">Student</span>
+                          <span className="text-[10px] theme-text-muted mt-0.5 block">Adaptive learning dashboard</span>
+                        </div>
+                      </button>
+                      
+                      <button
+                        id="role-teacher"
+                        type="button"
+                        role="radio"
+                        aria-checked={role === 'teacher'}
+                        onClick={() => setRole('teacher')}
+                        className={`flex items-center gap-3.5 p-4 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
+                          role === 'teacher'
+                            ? 'border-primary bg-primary/5 dark:bg-primary/10 ring-2 ring-primary/30 scale-[1.01] shadow-sm'
+                            : 'border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-950'
+                        }`}
+                      >
+                        <Users className={`w-8 h-8 flex-shrink-0 ${role === 'teacher' ? 'text-primary' : 'theme-text-muted'}`} />
+                        <div>
+                          <span className="theme-text font-extrabold text-sm block">Teacher</span>
+                          <span className="text-[10px] theme-text-muted mt-0.5 block">Reports & compliance logs</span>
+                        </div>
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <label htmlFor="lastName" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Last Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="lastName"
-                      type="text"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      placeholder="Doe"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="mobile" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Mobile Number <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="mobile"
-                      type="tel"
-                      value={mobile}
-                      onChange={(e) => setMobile(e.target.value)}
-                      placeholder="9876543210"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Email Address {role === 'student' ? '(Optional)' : <span className="text-red-500">*</span>}
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="john@school.edu"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Password <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label htmlFor="confirmPassword" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Confirm Password <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="confirmPassword"
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 2: Education / Special Needs (STUDENT) */}
-            {step === 2 && role === 'student' && (
-              <div className="space-y-6 animate-fade-in">
-                <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Education & Accessibility</h3>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="gradeLevel" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Class / Grade <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="gradeLevel"
-                      value={gradeLevel}
-                      onChange={(e) => setGradeLevel(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-350"
-                    >
-                      <option value="" disabled className="dark:bg-gray-900">Select Grade...</option>
-                      {Array.from({ length: 12 }, (_, i) => i + 1).map((grade) => (
-                        <option key={grade} value={grade.toString()} className="dark:bg-gray-900">Grade {grade}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label htmlFor="schoolName" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      School / College Name
-                    </label>
-                    <input
-                      id="schoolName"
-                      type="text"
-                      value={schoolName}
-                      onChange={(e) => setSchoolName(e.target.value)}
-                      placeholder="Central High School"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="udiseCode" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      School UDISE Code
-                    </label>
-                    <input
-                      id="udiseCode"
-                      type="text"
-                      value={udiseCode}
-                      onChange={(e) => setUdiseCode(e.target.value)}
-                      placeholder="27220100101"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label htmlFor="apparNumber" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Student APAAR Number (Optional)
-                    </label>
-                    <input
-                      id="apparNumber"
-                      type="text"
-                      value={apparNumber}
-                      onChange={(e) => setApparNumber(e.target.value)}
-                      placeholder="12-digit number"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
-                    />
-                  </div>
-                </div>
-
-                <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 space-y-4">
-                  <div className="space-y-1">
-                    <label htmlFor="disability" className="block text-sm font-extrabold theme-text">
-                      Accessibility Adaptations <span className="text-red-500">*</span>
-                    </label>
-                    <p className="text-xs theme-text-muted">
-                      Select your profile to automatically personalize layouts and interaction spacing.
-                    </p>
-                  </div>
-                  <select
-                    id="disability"
-                    value={specialNeed}
-                    onChange={(e) => setSpecialNeed(e.target.value)}
-                    className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-white dark:bg-slate-900 theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  >
-                    <option value="" disabled className="dark:bg-gray-900">Select profile...</option>
-                    <option value="typical" className="dark:bg-gray-900">Typical Learning Profile</option>
-                    {disabilitiesList.slice(0, -1).map(d => (
-                      <option key={d.value} value={d.value} className="dark:bg-gray-900">{d.label}</option>
-                    ))}
-                    <option value="other" className="dark:bg-gray-900">Other (Detail below)</option>
-                  </select>
-
-                  {specialNeed === 'other' && (
-                    <div className="mt-4 animate-scale-up space-y-2">
-                      <label htmlFor="otherNeedText" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                        Accommodations description <span className="text-red-500">*</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t theme-border pt-5">
+                    <div className="space-y-1.5">
+                      <label htmlFor="firstName" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        First Name <span className="text-red-500">*</span>
                       </label>
-                      <textarea
-                        id="otherNeedText"
-                        value={otherNeedText}
-                        onChange={(e) => setOtherNeedText(e.target.value)}
-                        rows={3}
-                        className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-white dark:bg-slate-900 theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
-                        placeholder="Detail specific accessibility tools or adaptations needed..."
+                      <input
+                        id="firstName"
+                        type="text"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="John"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200"
                       />
                     </div>
-                  )}
-                </div>
-              </div>
-            )}
 
-            {/* STEP 2: Professional Details (TEACHER) */}
-            {step === 2 && role === 'teacher' && (
-              <div className="space-y-6 animate-fade-in">
-                <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Professional Information</h3>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="subjectsTaught" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Subjects Taught <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="subjectsTaught"
-                      type="text"
-                      value={subjectsTaught}
-                      onChange={(e) => setSubjectsTaught(e.target.value)}
-                      placeholder="Science, History"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label htmlFor="specialization" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Specialization
-                    </label>
-                    <input
-                      id="specialization"
-                      type="text"
-                      value={specialization}
-                      onChange={(e) => setSpecialization(e.target.value)}
-                      placeholder="Inclusive STEM, Special Ed"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="organization" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                    Current School / Organization <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="organization"
-                    type="text"
-                    value={organization}
-                    onChange={(e) => setOrganization(e.target.value)}
-                    placeholder="St. Mary's School"
-                    className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
-                  />
-                </div>
-
-                <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 space-y-4">
-                  <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                    <div className="space-y-0.5">
-                      <label className="block text-sm font-extrabold theme-text">
-                        Accessibility & Inclusion Experience
+                    <div className="space-y-1.5">
+                      <label htmlFor="lastName" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Last Name <span className="text-red-500">*</span>
                       </label>
-                      <span className="text-xs theme-text-muted">Do you have experience with CWSN students?</span>
-                    </div>
-                    <div className="flex gap-4">
-                      <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input 
-                          type="radio" 
-                          name="cwsnExperience" 
-                          checked={cwsnExperience === true}
-                          onChange={() => setCwsnExperience(true)}
-                          className="text-primary w-4 h-4 cursor-pointer" 
-                        />
-                        <span className="theme-text text-sm font-semibold">Yes</span>
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input 
-                          type="radio" 
-                          name="cwsnExperience" 
-                          checked={cwsnExperience === false}
-                          onChange={() => setCwsnExperience(false)}
-                          className="text-primary w-4 h-4 cursor-pointer" 
-                        />
-                        <span className="theme-text text-sm font-semibold">No</span>
-                      </label>
+                      <input
+                        id="lastName"
+                        type="text"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder="Doe"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200"
+                      />
                     </div>
                   </div>
 
-                  {cwsnExperience && (
-                    <div className="animate-scale-up pt-4 border-t theme-border space-y-3">
-                      <span className="block text-xs font-bold uppercase tracking-wider text-primary">
-                        Disabilities Worked With (Select all that apply)
-                      </span>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
-                        {disabilitiesList.slice(0, -1).map(d => (
-                          <label key={d.value} className="flex items-center gap-3 text-sm theme-text cursor-pointer select-none">
-                            <input 
-                              type="checkbox"
-                              checked={workedDisabilities.includes(d.value)}
-                              onChange={() => handleDisabilityCheckboxChange(d.value)}
-                              className="rounded text-primary focus:ring-primary w-4 h-4 cursor-pointer"
-                            />
-                            {d.label}
-                          </label>
-                        ))}
-                      </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="mobile" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Mobile Number <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="mobile"
+                        type="tel"
+                        value={mobile}
+                        onChange={(e) => setMobile(e.target.value)}
+                        placeholder="9876543210"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200"
+                      />
                     </div>
-                  )}
-                </div>
-              </div>
-            )}
 
-            {/* STEP 3: Parent / Guardian Account Info (STUDENT) */}
-            {step === 3 && role === 'student' && (
-              <div className="space-y-6 animate-fade-in">
-                <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Parent / Guardian Portal Account</h3>
-                <p className="text-xs theme-text-muted mb-4">
-                  Define credentials for your Parent/Guardian. They will get a linked log-in to view reports, adaptive progress, and course activities.
-                </p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="parentName" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Parent / Guardian Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="parentName"
-                      type="text"
-                      value={parentName}
-                      onChange={(e) => setParentName(e.target.value)}
-                      placeholder="Sarah Doe"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label htmlFor="parentMobile" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Parent Mobile Number <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="parentMobile"
-                      type="tel"
-                      value={parentMobile}
-                      onChange={(e) => setParentMobile(e.target.value)}
-                      placeholder="9876543211"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="parentEmail" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                    Parent Email Address (Optional but recommended)
-                  </label>
-                  <input
-                    id="parentEmail"
-                    type="email"
-                    value={parentEmail}
-                    onChange={(e) => setParentEmail(e.target.value)}
-                    placeholder="parent@home.com"
-                    className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="parentPassword" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Parent Account Password <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="parentPassword"
-                      type="password"
-                      value={parentPassword}
-                      onChange={(e) => setParentPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label htmlFor="parentConfirmPassword" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Confirm Parent Password <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="parentConfirmPassword"
-                      type="password"
-                      value={parentConfirmPassword}
-                      onChange={(e) => setParentConfirmPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 3: Contact & Disability Info (TEACHER) */}
-            {step === 3 && role === 'teacher' && (
-              <div className="space-y-6 animate-fade-in">
-                <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Contact Details & Accommodations</h3>
-
-                <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 space-y-4">
-                  <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                    <div className="space-y-0.5">
-                      <label className="block text-sm font-extrabold theme-text">
-                        Personal Accommodations
+                    <div className="space-y-1.5">
+                      <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Email Address {role === 'student' ? '(Optional)' : <span className="text-red-500">*</span>}
                       </label>
-                      <span className="text-xs theme-text-muted">Do you have a personal disability/special need?</span>
-                    </div>
-                    <div className="flex gap-4">
-                      <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input 
-                          type="radio" 
-                          name="teacherHasDisability" 
-                          checked={teacherHasDisability === true}
-                          onChange={() => setTeacherHasDisability(true)}
-                          className="text-primary w-4 h-4 cursor-pointer" 
-                        />
-                        <span className="theme-text text-sm font-semibold">Yes</span>
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input 
-                          type="radio" 
-                          name="teacherHasDisability" 
-                          checked={teacherHasDisability === false}
-                          onChange={() => setTeacherHasDisability(false)}
-                          className="text-primary w-4 h-4 cursor-pointer" 
-                        />
-                        <span className="theme-text text-sm font-semibold">No</span>
-                      </label>
+                      <input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="john@school.edu"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200"
+                      />
                     </div>
                   </div>
 
-                  {teacherHasDisability && (
-                    <div className="animate-scale-up pt-4 border-t theme-border space-y-2">
-                      <label htmlFor="teacherDisabilityType" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                        Select Special Need Type
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Password <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="confirmPassword" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Confirm Password <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="confirmPassword"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 2: Education / Special Needs (STUDENT) */}
+              {step === 2 && role === 'student' && (
+                <div className="space-y-6 animate-fade-in">
+                  <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Education & Accessibility</h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="gradeLevel" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Class / Grade <span className="text-red-500">*</span>
                       </label>
                       <select
-                        id="teacherDisabilityType"
-                        value={teacherDisabilityType}
-                        onChange={(e) => setTeacherDisabilityType(e.target.value)}
-                        className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-white dark:bg-slate-900 theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        id="gradeLevel"
+                        value={gradeLevel}
+                        onChange={(e) => setGradeLevel(e.target.value)}
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-350"
                       >
-                        <option value="" disabled className="dark:bg-gray-900">Select special need...</option>
-                        {disabilitiesList.slice(0, -1).map(d => (
-                          <option key={d.value} value={d.value} className="dark:bg-gray-900">{d.label}</option>
+                        <option value="" disabled className="dark:bg-gray-900">Select Grade...</option>
+                        {Array.from({ length: 12 }, (_, i) => i + 1).map((grade) => (
+                          <option key={grade} value={grade.toString()} className="dark:bg-gray-900">Grade {grade}</option>
                         ))}
                       </select>
                     </div>
-                  )}
-                </div>
 
-                <div className="space-y-1.5">
-                  <label htmlFor="address" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                    Contact Address <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    id="address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    rows={3}
-                    placeholder="123 Teacher's Lane, City Center"
-                    className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
-                  />
-                </div>
+                    <div className="space-y-1.5">
+                      <label htmlFor="schoolName" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        School / College Name
+                      </label>
+                      <input
+                        id="schoolName"
+                        type="text"
+                        value={schoolName}
+                        onChange={(e) => setSchoolName(e.target.value)}
+                        placeholder="Central High School"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200"
+                      />
+                    </div>
+                  </div>
 
-                <div className="space-y-1.5">
-                  <label htmlFor="emergencyContact" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                    Emergency Contact Number <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="emergencyContact"
-                    type="tel"
-                    value={emergencyContact}
-                    onChange={(e) => setEmergencyContact(e.target.value)}
-                    placeholder="9876543219"
-                    className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
-                  />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="udiseCode" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        School UDISE Code
+                      </label>
+                      <input
+                        id="udiseCode"
+                        type="text"
+                        value={udiseCode}
+                        onChange={(e) => setUdiseCode(e.target.value)}
+                        placeholder="27220100101"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="apparNumber" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Student APAAR Number (Optional)
+                      </label>
+                      <input
+                        id="apparNumber"
+                        type="text"
+                        value={apparNumber}
+                        onChange={(e) => setApparNumber(e.target.value)}
+                        placeholder="12-digit number"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 space-y-4">
+                    <div className="space-y-1">
+                      <label htmlFor="disability" className="block text-sm font-extrabold theme-text">
+                        Accessibility Adaptations <span className="text-red-500">*</span>
+                      </label>
+                      <p className="text-xs theme-text-muted">
+                        Select your profile to automatically personalize layouts and interaction spacing.
+                      </p>
+                    </div>
+                    <select
+                      id="disability"
+                      value={specialNeed}
+                      onChange={(e) => setSpecialNeed(e.target.value)}
+                      className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-white dark:bg-slate-900 theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    >
+                      <option value="" disabled className="dark:bg-gray-900">Select profile...</option>
+                      <option value="typical" className="dark:bg-gray-900">Typical Learning Profile</option>
+                      {disabilitiesList.slice(0, -1).map(d => (
+                        <option key={d.value} value={d.value} className="dark:bg-gray-900">{d.label}</option>
+                      ))}
+                      <option value="other" className="dark:bg-gray-900">Other (Detail below)</option>
+                    </select>
+
+                    {specialNeed === 'other' && (
+                      <div className="mt-4 animate-scale-up space-y-2">
+                        <label htmlFor="otherNeedText" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                          Accommodations description <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          id="otherNeedText"
+                          value={otherNeedText}
+                          onChange={(e) => setOtherNeedText(e.target.value)}
+                          rows={3}
+                          className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-white dark:bg-slate-900 theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                          placeholder="Detail specific accessibility tools or adaptations needed..."
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
+              )}
+
+              {/* STEP 2: Professional Details (TEACHER) */}
+              {step === 2 && role === 'teacher' && (
+                <div className="space-y-6 animate-fade-in">
+                  <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Professional Information</h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="subjectsTaught" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Subjects Taught <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="subjectsTaught"
+                        type="text"
+                        value={subjectsTaught}
+                        onChange={(e) => setSubjectsTaught(e.target.value)}
+                        placeholder="Science, History"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="specialization" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Specialization
+                      </label>
+                      <input
+                        id="specialization"
+                        type="text"
+                        value={specialization}
+                        onChange={(e) => setSpecialization(e.target.value)}
+                        placeholder="Inclusive STEM, Special Ed"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-255 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="organization" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                      Current School / Organization <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="organization"
+                      type="text"
+                      value={organization}
+                      onChange={(e) => setOrganization(e.target.value)}
+                      placeholder="St. Mary's School"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300"
+                    />
+                  </div>
+
+                  <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 space-y-4">
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                      <div className="space-y-0.5">
+                        <label className="block text-sm font-extrabold theme-text">
+                          Accessibility & Inclusion Experience
+                        </label>
+                        <span className="text-xs theme-text-muted">Do you have experience with CWSN students?</span>
+                      </div>
+                      <div className="flex gap-4">
+                        <label className="flex items-center gap-2 cursor-pointer select-none">
+                          <input 
+                            type="radio" 
+                            name="cwsnExperience" 
+                            checked={cwsnExperience === true}
+                            onChange={() => setCwsnExperience(true)}
+                            className="text-primary w-4 h-4 cursor-pointer" 
+                          />
+                          <span className="theme-text text-sm font-semibold">Yes</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer select-none">
+                          <input 
+                            type="radio" 
+                            name="cwsnExperience" 
+                            checked={cwsnExperience === false}
+                            onChange={() => setCwsnExperience(false)}
+                            className="text-primary w-4 h-4 cursor-pointer" 
+                          />
+                          <span className="theme-text text-sm font-semibold">No</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    {cwsnExperience && (
+                      <div className="animate-scale-up pt-4 border-t theme-border space-y-3">
+                        <span className="block text-xs font-bold uppercase tracking-wider text-primary">
+                          Disabilities Worked With (Select all that apply)
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
+                          {disabilitiesList.slice(0, -1).map(d => (
+                            <label key={d.value} className="flex items-center gap-3 text-sm theme-text cursor-pointer select-none">
+                              <input 
+                                type="checkbox"
+                                checked={workedDisabilities.includes(d.value)}
+                                onChange={() => handleDisabilityCheckboxChange(d.value)}
+                                className="rounded text-primary focus:ring-primary w-4 h-4 cursor-pointer"
+                              />
+                              {d.label}
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 3: Parent / Guardian Account Info (STUDENT) */}
+              {step === 3 && role === 'student' && (
+                <div className="space-y-6 animate-fade-in">
+                  <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Parent / Guardian Portal Account</h3>
+                  <p className="text-xs theme-text-muted mb-4">
+                    Define credentials for your Parent/Guardian. They will get a linked log-in to view reports, adaptive progress, and course activities.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="parentName" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Parent / Guardian Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="parentName"
+                        type="text"
+                        value={parentName}
+                        onChange={(e) => setParentName(e.target.value)}
+                        placeholder="Sarah Doe"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="parentMobile" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Parent Mobile Number <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="parentMobile"
+                        type="tel"
+                        value={parentMobile}
+                        onChange={(e) => setParentMobile(e.target.value)}
+                        placeholder="9876543211"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="parentEmail" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                      Parent Email Address (Optional but recommended)
+                    </label>
+                    <input
+                      id="parentEmail"
+                      type="email"
+                      value={parentEmail}
+                      onChange={(e) => setParentEmail(e.target.value)}
+                      placeholder="parent@home.com"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="parentPassword" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Parent Account Password <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="parentPassword"
+                        type="password"
+                        value={parentPassword}
+                        onChange={(e) => setParentPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="parentConfirmPassword" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                        Confirm Parent Password <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="parentConfirmPassword"
+                        type="password"
+                        value={parentConfirmPassword}
+                        onChange={(e) => setParentConfirmPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 3: Contact & Disability Info (TEACHER) */}
+              {step === 3 && role === 'teacher' && (
+                <div className="space-y-6 animate-fade-in">
+                  <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Contact Details & Accommodations</h3>
+
+                  <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 space-y-4">
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                      <div className="space-y-0.5">
+                        <label className="block text-sm font-extrabold theme-text">
+                          Personal Accommodations
+                        </label>
+                        <span className="text-xs theme-text-muted">Do you have a personal disability/special need?</span>
+                      </div>
+                      <div className="flex gap-4">
+                        <label className="flex items-center gap-2 cursor-pointer select-none">
+                          <input 
+                            type="radio" 
+                            name="teacherHasDisability" 
+                            checked={teacherHasDisability === true}
+                            onChange={() => setTeacherHasDisability(true)}
+                            className="text-primary w-4 h-4 cursor-pointer" 
+                          />
+                          <span className="theme-text text-sm font-semibold">Yes</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer select-none">
+                          <input 
+                            type="radio" 
+                            name="teacherHasDisability" 
+                            checked={teacherHasDisability === false}
+                            onChange={() => setTeacherHasDisability(false)}
+                            className="text-primary w-4 h-4 cursor-pointer" 
+                          />
+                          <span className="theme-text text-sm font-semibold">No</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    {teacherHasDisability && (
+                      <div className="animate-scale-up pt-4 border-t theme-border space-y-2">
+                        <label htmlFor="teacherDisabilityType" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                          Select Special Need Type
+                        </label>
+                        <select
+                          id="teacherDisabilityType"
+                          value={teacherDisabilityType}
+                          onChange={(e) => setTeacherDisabilityType(e.target.value)}
+                          className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-white dark:bg-slate-900 theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        >
+                          <option value="" disabled className="dark:bg-gray-900">Select special need...</option>
+                          {disabilitiesList.slice(0, -1).map(d => (
+                            <option key={d.value} value={d.value} className="dark:bg-gray-900">{d.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="address" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                      Contact Address <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      id="address"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      rows={3}
+                      placeholder="123 Teacher's Lane, City Center"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="emergencyContact" className="block text-xs font-bold uppercase tracking-wider text-primary">
+                      Emergency Contact Number <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="emergencyContact"
+                      type="tel"
+                      value={emergencyContact}
+                      onChange={(e) => setEmergencyContact(e.target.value)}
+                      placeholder="9876543219"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Navigation buttons */}
+              <div className="flex gap-4 pt-5 border-t theme-border">
+                {step > 1 && (
+                  <Button type="button" variant="outline" className="flex-1 py-3 font-bold rounded-xl text-sm" onClick={prevStep}>
+                    Back
+                  </Button>
+                )}
+                
+                {step < 3 ? (
+                  <Button type="button" fullWidth={step === 1} className="flex-1 gap-2 py-3 font-bold rounded-xl text-sm" onClick={nextStep}>
+                    Next Step
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                ) : (
+                  <Button type="submit" className="flex-1 gap-2 py-3 font-bold rounded-xl text-sm" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+                    ) : (
+                      <UserPlus className="w-5 h-5" aria-hidden="true" />
+                    )}
+                    {isSubmitting ? 'Registering...' : 'Register Account'}
+                  </Button>
+                )}
               </div>
-            )}
-
-            {/* Navigation buttons */}
-            <div className="flex gap-4 pt-5 border-t theme-border">
-              {step > 1 && (
-                <Button type="button" variant="outline" className="flex-1 py-3 font-bold rounded-xl text-sm" onClick={prevStep}>
-                  Back
-                </Button>
-              )}
-              
-              {step < 3 ? (
-                <Button type="button" fullWidth={step === 1} className="flex-1 gap-2 py-3 font-bold rounded-xl text-sm animate-pulse-accent" onClick={nextStep}>
-                  Next Step
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              ) : (
-                <Button type="submit" className="flex-1 gap-2 py-3 font-bold rounded-xl text-sm" disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
-                  ) : (
-                    <UserPlus className="w-5 h-5" aria-hidden="true" />
-                  )}
-                  {isSubmitting ? 'Registering...' : 'Register Account'}
-                </Button>
-              )}
-            </div>
-          </form>
+            </form>
+          </div>
 
           <div className="pt-4 flex justify-center">
             <Link to="/" className="flex items-center gap-2 text-sm theme-text-muted hover:text-primary transition-colors font-medium">

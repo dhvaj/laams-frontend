@@ -300,7 +300,7 @@ export const Register: React.FC = () => {
       </section>
 
       {/* RIGHT PANEL: Spacious Form Area */}
-      <section className="w-full lg:w-7/12 flex flex-col justify-center py-12 px-6 sm:px-12 xl:px-20 overflow-y-auto max-h-screen relative z-10">
+      <section className="w-full lg:w-7/12 flex flex-col justify-center py-12 px-6 sm:px-12 xl:px-20 overflow-y-auto max-h-screen relative z-10 bg-slate-50/40 dark:bg-slate-950/20">
         
         {/* Glow blobs for background aesthetic (visible on mobile too) */}
         <div className="lg:hidden absolute top-[-10%] right-[-10%] w-72 h-72 rounded-full bg-primary/10 blur-[80px]"></div>
@@ -326,7 +326,7 @@ export const Register: React.FC = () => {
           </div>
 
           {/* Stepper Progress bar */}
-          <div className="flex justify-between items-center bg-gray-50/50 dark:bg-gray-900/20 border theme-border p-4 rounded-2xl">
+          <div className="flex justify-between items-center bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 p-4 rounded-2xl shadow-sm">
             {[1, 2, 3].map((num) => (
               <div key={num} className="flex items-center">
                 <div className="flex items-center gap-2">
@@ -335,7 +335,7 @@ export const Register: React.FC = () => {
                       ? 'bg-primary text-white ring-4 ring-primary/20 scale-105 shadow-sm' 
                       : step > num 
                         ? 'bg-green-500 text-white' 
-                        : 'bg-gray-250 dark:bg-gray-800 theme-text-muted border theme-border'
+                        : 'bg-slate-100 dark:bg-slate-800 theme-text-muted border border-gray-200 dark:border-slate-750'
                   }`}>
                     {step > num ? <Check className="w-4 h-4" /> : num}
                   </div>
@@ -345,7 +345,7 @@ export const Register: React.FC = () => {
                 </div>
                 {num < 3 && (
                   <div className={`w-12 sm:w-20 h-0.5 mx-2 rounded-full transition-all duration-500 ${
-                    step > num ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-800'
+                    step > num ? 'bg-green-500' : 'bg-gray-250 dark:bg-gray-800'
                   }`} />
                 )}
               </div>
@@ -379,7 +379,7 @@ export const Register: React.FC = () => {
                       className={`flex items-center gap-3.5 p-4 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
                         role === 'student'
                           ? 'border-primary bg-primary/5 dark:bg-primary/10 ring-2 ring-primary/30 scale-[1.01] shadow-sm'
-                          : 'border-gray-200/50 dark:border-gray-800/50 bg-white/20 dark:bg-gray-950/20 hover:bg-white/40 dark:hover:bg-gray-950/40'
+                          : 'border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-950'
                       }`}
                     >
                       <GraduationCap className={`w-8 h-8 flex-shrink-0 ${role === 'student' ? 'text-primary' : 'theme-text-muted'}`} />
@@ -398,7 +398,7 @@ export const Register: React.FC = () => {
                       className={`flex items-center gap-3.5 p-4 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
                         role === 'teacher'
                           ? 'border-primary bg-primary/5 dark:bg-primary/10 ring-2 ring-primary/30 scale-[1.01] shadow-sm'
-                          : 'border-gray-200/50 dark:border-gray-800/50 bg-white/20 dark:bg-gray-950/20 hover:bg-white/40 dark:hover:bg-gray-950/40'
+                          : 'border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-950'
                       }`}
                     >
                       <Users className={`w-8 h-8 flex-shrink-0 ${role === 'teacher' ? 'text-primary' : 'theme-text-muted'}`} />
@@ -421,7 +421,7 @@ export const Register: React.FC = () => {
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
                       placeholder="John"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-450"
                     />
                   </div>
 
@@ -435,7 +435,7 @@ export const Register: React.FC = () => {
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
                       placeholder="Doe"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
                     />
                   </div>
                 </div>
@@ -451,7 +451,7 @@ export const Register: React.FC = () => {
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
                       placeholder="9876543210"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
                     />
                   </div>
 
@@ -465,7 +465,7 @@ export const Register: React.FC = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="john@school.edu"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
                     />
                   </div>
                 </div>
@@ -481,7 +481,7 @@ export const Register: React.FC = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
                     />
                   </div>
 
@@ -495,7 +495,7 @@ export const Register: React.FC = () => {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
                     />
                   </div>
                 </div>
@@ -516,7 +516,7 @@ export const Register: React.FC = () => {
                       id="gradeLevel"
                       value={gradeLevel}
                       onChange={(e) => setGradeLevel(e.target.value)}
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-350"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-350"
                     >
                       <option value="" disabled className="dark:bg-gray-900">Select Grade...</option>
                       {Array.from({ length: 12 }, (_, i) => i + 1).map((grade) => (
@@ -535,7 +535,7 @@ export const Register: React.FC = () => {
                       value={schoolName}
                       onChange={(e) => setSchoolName(e.target.value)}
                       placeholder="Central High School"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
                     />
                   </div>
                 </div>
@@ -551,7 +551,7 @@ export const Register: React.FC = () => {
                       value={udiseCode}
                       onChange={(e) => setUdiseCode(e.target.value)}
                       placeholder="27220100101"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
                     />
                   </div>
 
@@ -565,7 +565,7 @@ export const Register: React.FC = () => {
                       value={apparNumber}
                       onChange={(e) => setApparNumber(e.target.value)}
                       placeholder="12-digit number"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-200 placeholder:text-gray-455"
                     />
                   </div>
                 </div>
@@ -583,7 +583,7 @@ export const Register: React.FC = () => {
                     id="disability"
                     value={specialNeed}
                     onChange={(e) => setSpecialNeed(e.target.value)}
-                    className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-transparent theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-white dark:bg-slate-900 theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50"
                   >
                     <option value="" disabled className="dark:bg-gray-900">Select profile...</option>
                     <option value="typical" className="dark:bg-gray-900">Typical Learning Profile</option>
@@ -603,7 +603,7 @@ export const Register: React.FC = () => {
                         value={otherNeedText}
                         onChange={(e) => setOtherNeedText(e.target.value)}
                         rows={3}
-                        className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-transparent theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                        className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-white dark:bg-slate-900 theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
                         placeholder="Detail specific accessibility tools or adaptations needed..."
                       />
                     </div>
@@ -628,7 +628,7 @@ export const Register: React.FC = () => {
                       value={subjectsTaught}
                       onChange={(e) => setSubjectsTaught(e.target.value)}
                       placeholder="Science, History"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
                     />
                   </div>
 
@@ -642,7 +642,7 @@ export const Register: React.FC = () => {
                       value={specialization}
                       onChange={(e) => setSpecialization(e.target.value)}
                       placeholder="Inclusive STEM, Special Ed"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
                     />
                   </div>
                 </div>
@@ -657,7 +657,7 @@ export const Register: React.FC = () => {
                     value={organization}
                     onChange={(e) => setOrganization(e.target.value)}
                     placeholder="St. Mary's School"
-                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                    className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
                   />
                 </div>
 
@@ -736,7 +736,7 @@ export const Register: React.FC = () => {
                       value={parentName}
                       onChange={(e) => setParentName(e.target.value)}
                       placeholder="Sarah Doe"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
                     />
                   </div>
 
@@ -750,7 +750,7 @@ export const Register: React.FC = () => {
                       value={parentMobile}
                       onChange={(e) => setParentMobile(e.target.value)}
                       placeholder="9876543211"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
                     />
                   </div>
                 </div>
@@ -765,7 +765,7 @@ export const Register: React.FC = () => {
                     value={parentEmail}
                     onChange={(e) => setParentEmail(e.target.value)}
                     placeholder="parent@home.com"
-                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                    className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
                   />
                 </div>
 
@@ -780,7 +780,7 @@ export const Register: React.FC = () => {
                       value={parentPassword}
                       onChange={(e) => setParentPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
                     />
                   </div>
 
@@ -794,7 +794,7 @@ export const Register: React.FC = () => {
                       value={parentConfirmPassword}
                       onChange={(e) => setParentConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
                     />
                   </div>
                 </div>
@@ -847,7 +847,7 @@ export const Register: React.FC = () => {
                         id="teacherDisabilityType"
                         value={teacherDisabilityType}
                         onChange={(e) => setTeacherDisabilityType(e.target.value)}
-                        className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-transparent theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-white dark:bg-slate-900 theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50"
                       >
                         <option value="" disabled className="dark:bg-gray-900">Select special need...</option>
                         {disabilitiesList.slice(0, -1).map(d => (
@@ -868,7 +868,7 @@ export const Register: React.FC = () => {
                     onChange={(e) => setAddress(e.target.value)}
                     rows={3}
                     placeholder="123 Teacher's Lane, City Center"
-                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                    className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
                   />
                 </div>
 
@@ -882,7 +882,7 @@ export const Register: React.FC = () => {
                     value={emergencyContact}
                     onChange={(e) => setEmergencyContact(e.target.value)}
                     placeholder="9876543219"
-                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                    className="w-full bg-white dark:bg-slate-900 border border-gray-250 dark:border-slate-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all duration-300 placeholder:text-gray-455"
                   />
                 </div>
               </div>
@@ -897,7 +897,7 @@ export const Register: React.FC = () => {
               )}
               
               {step < 3 ? (
-                <Button type="button" fullWidth={step === 1} className="flex-1 gap-2 py-3 font-bold rounded-xl text-sm" onClick={nextStep}>
+                <Button type="button" fullWidth={step === 1} className="flex-1 gap-2 py-3 font-bold rounded-xl text-sm animate-pulse-accent" onClick={nextStep}>
                   Next Step
                   <ArrowRight className="w-4 h-4" />
                 </Button>

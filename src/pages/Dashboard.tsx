@@ -182,7 +182,7 @@ export const Dashboard: React.FC = () => {
               <p className="text-[10px] text-slate-400 truncate capitalize font-medium">Role: {role}</p>
             </div>
           </div>
-          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/10 transition-colors cursor-pointer text-xs font-bold">
+          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white transition-all duration-200 cursor-pointer text-xs font-extrabold shadow-[0_4px_12px_rgba(220,38,38,0.2)] hover:shadow-[0_4px_20px_rgba(220,38,38,0.35)] scale-[1.01] hover:scale-[1.02]">
             <LogOut className="w-4 h-4" aria-hidden="true" />
             {t('logout')}
           </button>
@@ -231,7 +231,7 @@ export const Dashboard: React.FC = () => {
               <p className="text-[10px] text-slate-400 truncate capitalize font-medium">Role: {role}</p>
             </div>
           </div>
-          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/10 transition-colors cursor-pointer text-xs font-bold">
+          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white transition-all duration-200 cursor-pointer text-xs font-extrabold shadow-[0_4px_12px_rgba(220,38,38,0.2)] hover:shadow-[0_4px_20px_rgba(220,38,38,0.35)] scale-[1.01] hover:scale-[1.02]">
             <LogOut className="w-4 h-4" aria-hidden="true" />
             {t('logout')}
           </button>

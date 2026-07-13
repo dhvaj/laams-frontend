@@ -32,19 +32,20 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col theme-bg theme-text transition-colors duration-300">
-      {/* Header */}
       <header className="theme-header-bg border-b theme-border shadow-sm py-4 px-6 flex flex-wrap gap-4 justify-between items-center transition-colors duration-300">
-        <div className="flex items-center gap-2">
-          <BookOpen className="w-8 h-8 text-primary" aria-hidden="true" />
-          <span className="text-2xl font-bold">LAAMS</span>
-        </div>
-        
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 mr-2">
+            <BookOpen className="w-8 h-8 text-primary" aria-hidden="true" />
+            <span className="text-2xl font-bold">LAAMS</span>
+          </div>
           
-          <nav className="hidden lg:flex gap-6 mx-4">
+          <nav className="hidden lg:flex gap-6">
             <a href="#about" className="theme-text-muted hover:text-primary transition-colors font-medium">About</a>
             <a href="#features" className="theme-text-muted hover:text-primary transition-colors font-medium">Features</a>
           </nav>
+        </div>
+        
+        <div className="flex flex-wrap items-center gap-4">
           
           <Link to="/register" className="flex items-center gap-2 px-5 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 font-medium transition-all shadow-sm hover:shadow-md hover:scale-102 active:scale-98">
             <span>Register</span>

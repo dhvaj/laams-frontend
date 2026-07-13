@@ -1175,8 +1175,9 @@ const ClassManagement = () => {
     try {
       await dashboardService.updateClass(classId, { teacherId: teacherId || null });
       setClassesList(prev => prev.map(c => c.id === classId ? { ...c, teacherId: teacherId || null } : c));
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to assign teacher to class', err);
+      alert('Error updating class teacher: ' + err.message + '\n\nPlease verify that the backend changes were pulled and restarted on the VPS.');
     }
   };
 

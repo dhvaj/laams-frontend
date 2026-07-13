@@ -28,6 +28,16 @@ export const Dashboard: React.FC = () => {
   }
 
   const getTranslationKey = (name: string) => {
+    if (role === 'teacher') {
+      switch (name) {
+        case 'Overview': return 'overview';
+        case 'My Classes': return 'teacher_classes';
+        case 'Content Hub': return 'content_hub';
+        case 'Assignments': return 'teacher_assignments';
+        case 'Exams': return 'teacher_exams';
+      }
+    }
+
     switch (name) {
       case 'Overview': return 'overview';
       case 'Library': return 'library';

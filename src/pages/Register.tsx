@@ -47,8 +47,27 @@ export const Register: React.FC = () => {
   const [address, setAddress] = useState('');
   const [emergencyContact, setEmergencyContact] = useState('');
 
-  // Accessibility screen reader focus management
+  // Accessibility screen reader announcement state
+  const [srAnnouncement, setSrAnnouncement] = useState('');
+
+  // Accessibility screen reader focus and speech management
   useEffect(() => {
+    let announcement = '';
+    if (step === 1) {
+      announcement = 'Step 1 of 3: Select role. Student radio button focused. Press down arrow to select teacher.';
+    } else if (step === 2) {
+      announcement = role === 'student' 
+        ? 'Step 2 of 3: Education and Special Needs. Grade selection dropdown focused.' 
+        : 'Step 2 of 3: Professional Information. Subjects taught field focused.';
+    } else if (step === 3) {
+      announcement = role === 'student' 
+        ? 'Step 3 of 3: Parent or Guardian Account. Parent name field focused.' 
+        : 'Step 3 of 3: Contact and Health details. Disability declaration section focused.';
+    }
+    
+    // Announce immediately to screen readers
+    setSrAnnouncement(announcement);
+
     const focusTimeout = setTimeout(() => {
       let element: HTMLElement | null = null;
       if (step === 1) {
@@ -62,7 +81,7 @@ export const Register: React.FC = () => {
       if (element) {
         element.focus();
       }
-    }, 450); // Increased timeout delay to ensure focus shifts after browser onload autofill focus overrides
+    }, 450);
 
     return () => clearTimeout(focusTimeout);
   }, [step, role]);
@@ -217,6 +236,10 @@ export const Register: React.FC = () => {
 
   return (
     <main id="main-content" className="min-h-screen theme-bg flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors duration-300 relative overflow-hidden">
+      {/* Offscreen assertive announcer for screen readers */}
+      <div className="sr-only" aria-live="assertive" role="status">
+        {srAnnouncement}
+      </div>
       {/* Background blobs */}
       <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full bg-primary/10 blur-3xl animate-float" style={{ animationDelay: '0s' }}></div>
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
@@ -247,7 +270,7 @@ export const Register: React.FC = () => {
                 Register as a
               </label>
               <div className="flex gap-8">
-                <label className="flex items-center gap-2 cursor-pointer select-none">
+                <div className="flex items-center gap-2">
                   <input 
                     type="radio" 
                     name="role" 
@@ -258,19 +281,24 @@ export const Register: React.FC = () => {
                     className="text-primary focus:ring-primary w-4 h-4 cursor-pointer" 
                     autoFocus
                   />
-                  <span className="theme-text font-semibold text-sm">Student</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <label htmlFor="role-student" className="theme-text font-semibold text-sm cursor-pointer select-none">
+                    Student
+                  </label>
+                </div>
+                <div className="flex items-center gap-2">
                   <input 
                     type="radio" 
                     name="role" 
+                    id="role-teacher"
                     value="teacher" 
                     checked={role === 'teacher'} 
                     onChange={() => { setRole('teacher'); setStep(1); }}
                     className="text-primary focus:ring-primary w-4 h-4 cursor-pointer" 
                   />
-                  <span className="theme-text font-semibold text-sm">Teacher</span>
-                </label>
+                  <label htmlFor="role-teacher" className="theme-text font-semibold text-sm cursor-pointer select-none">
+                    Teacher
+                  </label>
+                </div>
               </div>
             </div>
           )}

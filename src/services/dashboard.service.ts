@@ -89,11 +89,11 @@ export const dashboardService = {
   },
   createBook: async (book: { title: string; subject: string; classId?: string }, file: File): Promise<any> => {
     const formData = new FormData();
-    formData.append('file', file);
     formData.append('title', book.title);
     formData.append('subject', book.subject);
     formData.append('classId', book.classId || '1');
     formData.append('teacherId', getCurrentUserId() || '2');
+    formData.append('file', file);
     
     const response = await fetch(`${API_URL}/books`, {
               method: 'POST',
@@ -112,12 +112,12 @@ export const dashboardService = {
   createStudyMaterial: async (material: { title: string; subject: string; content: string; classId?: string }, file?: File | null): Promise<any> => {
     if (file) {
       const formData = new FormData();
-      formData.append('file', file);
       formData.append('title', material.title);
       formData.append('subject', material.subject);
       formData.append('content', material.content);
       formData.append('classId', material.classId || '1');
       formData.append('teacherId', getCurrentUserId() || '2');
+      formData.append('file', file);
       
       const response = await fetch(`${API_URL}/studyMaterials`, {
                 method: 'POST',

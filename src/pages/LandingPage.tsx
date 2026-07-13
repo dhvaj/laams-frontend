@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BookOpen, User, ArrowRight, Loader2 } from 'lucide-react';
-import { AccessibilityControls } from '../components/ui/AccessibilityControls';
+
 import { useAuth } from '../contexts/AuthContext';
 
 export const LandingPage: React.FC = () => {
@@ -40,8 +40,6 @@ export const LandingPage: React.FC = () => {
         </div>
         
         <div className="flex flex-wrap items-center gap-4">
-          
-          <AccessibilityControls />
           
           <nav className="hidden lg:flex gap-6 mx-4">
             <a href="#about" className="theme-text-muted hover:text-primary transition-colors font-medium">About</a>

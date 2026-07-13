@@ -13,8 +13,10 @@ import {
   Plus, 
   X,
   ChevronRight,
-  Filter
+  Filter,
+  Upload
 } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import { dashboardService } from '../../services/dashboard.service';
 import { authService } from '../../services/auth.service';
 import type { SystemStat, RegisteredUser, User, UserRole } from '../../types';
@@ -249,11 +251,109 @@ const UserManagement = () => {
   const [usersList, setUsersList] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddingUser, setIsAddingUser] = useState(false);
+  const [isImportingUsers, setIsImportingUsers] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [newUser, setNewUser] = useState({ firstName: '', lastName: '', email: '', role: 'student', needs: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
+
+  // Bulk Import States
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const [parsedRecords, setParsedRecords] = useState<any[]>([]);
+  const [activeImportTab, setActiveImportTab] = useState<'student' | 'teacher' | 'parent'>('student');
+  const [importStatus, setImportStatus] = useState<{ current: number; total: number; logs: string[] } | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImportFile(file);
+    setParsedRecords([]);
+    setImportStatus(null);
+    
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const data = new Uint8Array(evt.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(sheet);
+        setParsedRecords(json);
+      } catch (err: any) {
+        alert('Error parsing file: ' + err.message);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handleStartImport = async () => {
+    if (parsedRecords.length === 0) return;
+    setIsSubmitting(true);
+    setImportStatus({ current: 0, total: parsedRecords.length, logs: ['Starting import...'] });
+    
+    let successCount = 0;
+    const newLogs: string[] = [];
+    
+    for (let i = 0; i < parsedRecords.length; i++) {
+      const record = parsedRecords[i];
+      const displayName = record.fullName || `${record.firstName || ''} ${record.lastName || ''}`.trim() || record.email || 'Unknown User';
+      
+      try {
+        // Construct the register payload
+        const payload: any = {
+          firstName: record.firstName || record.fullName?.split(' ')[0] || 'First',
+          lastName: record.lastName || record.fullName?.split(' ').slice(1).join(' ') || 'Last',
+          email: record.email || (record.mobile ? `${record.mobile}@laams.edu` : undefined),
+          mobile: record.mobile ? record.mobile.toString() : undefined,
+          password: record.password ? record.password.toString() : 'Welcome@123',
+          role: activeImportTab,
+        };
+
+        if (activeImportTab === 'student') {
+          payload.gradeLevel = record.gradeLevel ? record.gradeLevel.toString() : '8';
+          payload.schoolName = record.schoolName || '';
+          payload.udiseCode = record.udiseCode ? record.udiseCode.toString() : '';
+          payload.apparNumber = record.apparNumber ? record.apparNumber.toString() : '';
+          payload.profileId = record.specialNeed || 'typical';
+          payload.parentName = record.parentName || '';
+          payload.parentMobile = record.parentMobile ? record.parentMobile.toString() : '';
+          payload.parentEmail = record.parentEmail || '';
+          payload.parentPassword = record.parentPassword ? record.parentPassword.toString() : 'Welcome@123';
+        } else if (activeImportTab === 'teacher') {
+          payload.subjectsTaught = record.subjectsTaught ? record.subjectsTaught.split(',').map((s: string) => s.trim()) : [];
+          payload.specialization = record.specialization || '';
+          payload.organization = record.organization || record.schoolName || '';
+          payload.cwsnExperience = record.cwsnExperience === true || record.cwsnExperience === 'true' || record.cwsnExperience === 'Yes';
+          payload.workedDisabilities = record.workedDisabilities ? record.workedDisabilities.split(',').map((s: string) => s.trim()) : [];
+          payload.hasDisability = record.hasDisability === true || record.hasDisability === 'true' || record.hasDisability === 'Yes';
+          payload.disabilityType = record.disabilityType || null;
+          payload.address = record.address || '';
+          payload.emergencyContact = record.emergencyContact ? record.emergencyContact.toString() : '';
+        }
+
+        await dashboardService.createUser(payload);
+        successCount++;
+        newLogs.push(`✅ Successfully imported: ${displayName}`);
+      } catch (err: any) {
+        newLogs.push(`❌ Failed to import ${displayName}: ${err.message}`);
+      }
+      
+      setImportStatus({
+        current: i + 1,
+        total: parsedRecords.length,
+        logs: [...newLogs]
+      });
+    }
+
+    // Refresh user list
+    try {
+      const refreshedUsers = await dashboardService.getAllUsers();
+      setUsersList(refreshedUsers);
+    } catch (e) {}
+
+    setIsSubmitting(false);
+  };
 
   useEffect(() => {
     dashboardService.getAllUsers().then(data => {
@@ -325,13 +425,22 @@ const UserManagement = () => {
           <h1 className="text-3xl font-extrabold theme-text tracking-tight">User Directory</h1>
           <p className="theme-text-muted text-sm font-medium mt-0.5">Register, link, edit, or delete platform student, parent, teacher and admin records.</p>
         </div>
-        <button 
-          onClick={() => setIsAddingUser(true)}
-          className="flex items-center justify-center gap-2 px-5 py-3 bg-gradient-premium hover:shadow-lg hover:shadow-primary/25 text-white font-bold rounded-xl hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer text-sm"
-        >
-          <Plus className="w-4 h-4" />
-          Add New User
-        </button>
+        <div className="flex gap-3">
+          <button 
+            onClick={() => setIsImportingUsers(true)}
+            className="flex items-center justify-center gap-2 px-5 py-3 border theme-border theme-text hover:bg-primary/10 font-bold rounded-xl hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer text-sm"
+          >
+            <Upload className="w-4 h-4" />
+            Bulk Import
+          </button>
+          <button 
+            onClick={() => setIsAddingUser(true)}
+            className="flex items-center justify-center gap-2 px-5 py-3 bg-gradient-premium hover:shadow-lg hover:shadow-primary/25 text-white font-bold rounded-xl hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer text-sm"
+          >
+            <Plus className="w-4 h-4" />
+            Add New User
+          </button>
+        </div>
       </div>
       
       {/* Search & Filters */}
@@ -566,6 +675,193 @@ const UserManagement = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Import Modal */}
+      {isImportingUsers && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fade-in">
+          <div className="bg-white dark:bg-gray-950 border theme-border p-6 md:p-8 rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[90vh] transform scale-100 transition-all duration-300 animate-scale-in">
+            <div className="flex justify-between items-center border-b theme-border pb-4 mb-4 flex-shrink-0">
+              <h2 className="text-xl font-bold theme-text tracking-tight flex items-center gap-2">
+                <Upload className="w-5 h-5 text-primary" />
+                Bulk Import Users (CSV / Excel)
+              </h2>
+              <button 
+                onClick={() => { setIsImportingUsers(false); setParsedRecords([]); setImportFile(null); setImportStatus(null); }} 
+                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg text-gray-500 transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="flex-1 overflow-y-auto pr-2 -mr-2 space-y-6">
+              
+              {/* Stepper active tab selector */}
+              <div className="flex border-b theme-border">
+                {(['student', 'teacher', 'parent'] as const).map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => { setActiveImportTab(t); setParsedRecords([]); setImportFile(null); setImportStatus(null); }}
+                    className={`flex-1 py-2.5 font-bold text-sm border-b-2 transition-all capitalize cursor-pointer ${
+                      activeImportTab === t 
+                        ? 'border-primary text-primary' 
+                        : 'border-transparent theme-text-muted hover:theme-text'
+                    }`}
+                  >
+                    {t}s Import
+                  </button>
+                ))}
+              </div>
+
+              {/* Specification guide details */}
+              <div className="bg-primary/5 p-4 rounded-xl border border-primary/20 space-y-2">
+                <h4 className="text-sm font-bold theme-text">Expected Columns in CSV / Excel file:</h4>
+                <p className="text-xs theme-text-muted">
+                  Please make sure your sheet includes these exact header columns (order does not matter):
+                </p>
+                <div className="text-xs space-y-1 bg-white/50 dark:bg-gray-900/30 p-2.5 rounded-lg border theme-border font-mono max-h-36 overflow-y-auto">
+                  {activeImportTab === 'student' && (
+                    <>
+                      <div>• <span className="font-bold text-primary">firstName</span> (Required) - e.g. "Aarav"</div>
+                      <div>• <span className="font-bold text-primary">lastName</span> (Required) - e.g. "Sharma"</div>
+                      <div>• <span className="font-bold text-primary">mobile</span> (Required) - e.g. "9876543210"</div>
+                      <div>• <span className="font-bold text-primary">email</span> (Optional) - e.g. "aarav@school.edu"</div>
+                      <div>• <span className="font-bold text-primary">password</span> (Required) - e.g. "AaravPass1"</div>
+                      <div>• <span className="font-bold text-primary">gradeLevel</span> (Required) - e.g. "8"</div>
+                      <div>• <span className="font-bold text-primary">schoolName</span> (Optional) - e.g. "Central Public School"</div>
+                      <div>• <span className="font-bold text-primary">udiseCode</span> (Optional) - e.g. "27220100101"</div>
+                      <div>• <span className="font-bold text-primary">apparNumber</span> (Optional) - e.g. "123456789012"</div>
+                      <div>• <span className="font-bold text-primary">specialNeed</span> (Required) - "typical" | "blind" | "low-vision" | "deaf" | "dyslexic" | "id" | "asd" | "cerebral-palsy" | "learning" | "dysgraphia" | "dyscalculia" | "multiple"</div>
+                      <div>• <span className="font-bold text-primary">parentName</span> (Required) - e.g. "Sarah Sharma"</div>
+                      <div>• <span className="font-bold text-primary">parentMobile</span> (Required) - e.g. "9876543211"</div>
+                      <div>• <span className="font-bold text-primary">parentEmail</span> (Optional) - e.g. "parent@sharma.com"</div>
+                      <div>• <span className="font-bold text-primary">parentPassword</span> (Required) - e.g. "ParentPass1"</div>
+                    </>
+                  )}
+                  {activeImportTab === 'teacher' && (
+                    <>
+                      <div>• <span className="font-bold text-primary">firstName</span> (Required) - e.g. "Maya"</div>
+                      <div>• <span className="font-bold text-primary">lastName</span> (Required) - e.g. "Patel"</div>
+                      <div>• <span className="font-bold text-primary">mobile</span> (Required) - e.g. "9876543220"</div>
+                      <div>• <span className="font-bold text-primary">email</span> (Required) - e.g. "maya.teacher@school.edu"</div>
+                      <div>• <span className="font-bold text-primary">password</span> (Required) - e.g. "TeacherPass1"</div>
+                      <div>• <span className="font-bold text-primary">subjectsTaught</span> (Required, comma-separated) - e.g. "Science, History"</div>
+                      <div>• <span className="font-bold text-primary">specialization</span> (Optional) - e.g. "Inclusive STEM Education"</div>
+                      <div>• <span className="font-bold text-primary">organization</span> (Required) - e.g. "Central Public School"</div>
+                      <div>• <span className="font-bold text-primary">cwsnExperience</span> (Required) - "Yes" or "No"</div>
+                      <div>• <span className="font-bold text-primary">workedDisabilities</span> (Comma-separated CWSN keys) - e.g. "blind, deaf, dyslexic"</div>
+                      <div>• <span className="font-bold text-primary">hasDisability</span> (Required) - "Yes" or "No"</div>
+                      <div>• <span className="font-bold text-primary">disabilityType</span> (Optional) - e.g. "low-vision"</div>
+                      <div>• <span className="font-bold text-primary">address</span> (Required) - e.g. "123 School Lane, City"</div>
+                      <div>• <span className="font-bold text-primary">emergencyContact</span> (Required) - e.g. "9876543229"</div>
+                    </>
+                  )}
+                  {activeImportTab === 'parent' && (
+                    <>
+                      <div>• <span className="font-bold text-primary">firstName</span> (Required) - e.g. "Raj"</div>
+                      <div>• <span className="font-bold text-primary">lastName</span> (Required) - e.g. "Mehta"</div>
+                      <div>• <span className="font-bold text-primary">mobile</span> (Required) - e.g. "9876543230"</div>
+                      <div>• <span className="font-bold text-primary">email</span> (Optional) - e.g. "parent.raj@gmail.com"</div>
+                      <div>• <span className="font-bold text-primary">password</span> (Required) - e.g. "ParentPass2"</div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* File input selector */}
+              <div className="border-2 border-dashed theme-border rounded-xl p-6 text-center hover:bg-gray-50/50 dark:hover:bg-gray-900/10 transition-colors relative">
+                <input 
+                  type="file"
+                  accept=".csv,.xlsx,.xls"
+                  onChange={handleFileChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <Upload className="w-8 h-8 text-primary mx-auto mb-2" />
+                <p className="text-sm font-semibold theme-text">
+                  {importFile ? importFile.name : 'Select or drag & drop CSV or Excel file'}
+                </p>
+                <p className="text-xs theme-text-muted mt-1">Supports .csv, .xlsx, .xls formats</p>
+              </div>
+
+              {/* Records preview table */}
+              {parsedRecords.length > 0 && (
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-sm font-bold theme-text">Live Sheet Preview ({parsedRecords.length} records found)</h4>
+                    <span className="text-xs text-green-500 font-bold">Ready to import</span>
+                  </div>
+                  <div className="border theme-border rounded-xl overflow-hidden max-h-48 overflow-y-auto">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead>
+                        <tr className="bg-gray-50 dark:bg-gray-900 border-b theme-border font-bold">
+                          <th className="p-2">Name</th>
+                          <th className="p-2">Mobile</th>
+                          <th className="p-2">Email</th>
+                          <th className="p-2">{activeImportTab === 'student' ? 'Grade' : 'Organization'}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {parsedRecords.slice(0, 10).map((r, idx) => (
+                          <tr key={idx} className="border-b theme-border last:border-0 hover:bg-gray-50/50 dark:hover:bg-gray-900/10">
+                            <td className="p-2 theme-text">{r.fullName || `${r.firstName || ''} ${r.lastName || ''}`}</td>
+                            <td className="p-2 theme-text">{r.mobile}</td>
+                            <td className="p-2 theme-text">{r.email || '-'}</td>
+                            <td className="p-2 theme-text">{activeImportTab === 'student' ? r.gradeLevel : r.organization || r.schoolName}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {parsedRecords.length > 10 && (
+                    <p className="text-[10px] theme-text-muted text-right italic">* Showing first 10 rows preview</p>
+                  )}
+                </div>
+              )}
+
+              {/* Import status and live logs progress */}
+              {importStatus && (
+                <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border theme-border space-y-2">
+                  <div className="flex justify-between text-xs font-bold theme-text">
+                    <span>Import Status</span>
+                    <span>{importStatus.current} of {importStatus.total} processed</span>
+                  </div>
+                  <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5">
+                    <div 
+                      className="bg-primary h-1.5 rounded-full transition-all duration-300"
+                      style={{ width: `${(importStatus.current / importStatus.total) * 100}%` }}
+                    />
+                  </div>
+                  <div className="text-[11px] font-mono max-h-36 overflow-y-auto bg-gray-950 text-gray-300 p-3 rounded-lg space-y-1">
+                    {importStatus.logs.slice(-5).map((log, idx) => (
+                      <div key={idx}>{log}</div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="flex gap-4 pt-4 border-t theme-border flex-shrink-0">
+              <button 
+                type="button" 
+                onClick={() => { setIsImportingUsers(false); setParsedRecords([]); setImportFile(null); setImportStatus(null); }} 
+                className="flex-1 py-3 border theme-border rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors theme-text text-sm cursor-pointer"
+              >
+                Close
+              </button>
+              <button 
+                type="button" 
+                onClick={handleStartImport}
+                disabled={isSubmitting || parsedRecords.length === 0} 
+                className="flex-1 py-3 bg-gradient-premium text-white rounded-xl font-bold hover:shadow-lg hover:shadow-primary/25 transition-all disabled:opacity-50 text-sm cursor-pointer flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? 'Importing...' : 'Start Bulk Import'}
+              </button>
+            </div>
           </div>
         </div>
       )}

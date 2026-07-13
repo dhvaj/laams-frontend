@@ -52,7 +52,7 @@ export const Register: React.FC = () => {
     const focusTimeout = setTimeout(() => {
       let element: HTMLElement | null = null;
       if (step === 1) {
-        element = document.getElementById('firstName');
+        element = document.getElementById('role-student');
       } else if (step === 2) {
         element = role === 'student' ? document.getElementById('gradeLevel') : document.getElementById('subjectsTaught');
       } else if (step === 3) {
@@ -62,7 +62,7 @@ export const Register: React.FC = () => {
       if (element) {
         element.focus();
       }
-    }, 150);
+    }, 450); // Increased timeout delay to ensure focus shifts after browser onload autofill focus overrides
 
     return () => clearTimeout(focusTimeout);
   }, [step, role]);
@@ -251,10 +251,12 @@ export const Register: React.FC = () => {
                   <input 
                     type="radio" 
                     name="role" 
+                    id="role-student"
                     value="student" 
                     checked={role === 'student'} 
                     onChange={() => { setRole('student'); setStep(1); }}
                     className="text-primary focus:ring-primary w-4 h-4 cursor-pointer" 
+                    autoFocus
                   />
                   <span className="theme-text font-semibold text-sm">Student</span>
                 </label>

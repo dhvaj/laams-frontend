@@ -129,17 +129,17 @@ export const Dashboard: React.FC = () => {
       )}
 
       {/* Mobile Sidebar Drawer */}
-      <aside className={`fixed top-0 bottom-0 left-0 z-50 w-64 theme-surface border-r theme-border flex flex-col h-full shrink-0 transition-transform duration-300 ease-out md:hidden ${
+      <aside className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950 text-slate-300 border-r border-white/5 flex flex-col h-full shrink-0 transition-transform duration-300 ease-out md:hidden ${
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        <div className="p-6 flex items-center justify-between border-b theme-border">
+        <div className="p-6 flex items-center justify-between border-b border-white/5">
           <div className="flex items-center gap-2">
             <BookOpen className="w-8 h-8 text-primary" aria-hidden="true" />
-            <span className="text-2xl font-bold theme-text">LAAMS</span>
+            <span className="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-400">LAAMS</span>
           </div>
           <button 
             onClick={() => setIsMobileMenuOpen(false)}
-            className="p-1.5 rounded-lg theme-text hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
             aria-label="Close menu"
           >
             <X className="w-5 h-5" />
@@ -147,10 +147,10 @@ export const Dashboard: React.FC = () => {
         </div>
 
         <div className="p-4 overflow-y-auto flex-1">
-          <p className="text-xs font-bold theme-text-muted uppercase tracking-wider mb-4 px-3">
+          <p className="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4 px-3">
             {portalName}
           </p>
-          <nav className="space-y-1">
+          <nav className="space-y-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path || (location.pathname.startsWith(item.path) && item.path !== '/dashboard');
@@ -159,39 +159,48 @@ export const Dashboard: React.FC = () => {
                   key={item.name}
                   to={item.path}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 border-l-4 ${isActive
-                    ? 'bg-gradient-to-r from-primary/10 to-indigo-500/5 text-primary border-primary font-bold shadow-sm'
-                    : 'theme-text border-transparent hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:translate-x-1'
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive
+                    ? 'bg-gradient-to-r from-primary to-indigo-600 text-white font-extrabold shadow-[0_4px_20px_rgba(170,59,255,0.25)] scale-[1.01]'
+                    : 'text-slate-400 hover:text-slate-100 hover:bg-white/5 hover:translate-x-1'
                     }`}
                 >
-                  <Icon className="w-5 h-5" aria-hidden="true" />
-                  {t(getTranslationKey(item.name))}
+                  <Icon className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+                  <span>{t(getTranslationKey(item.name))}</span>
                 </Link>
               );
             })}
           </nav>
         </div>
 
-        <div className="p-4 border-t theme-border">
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl theme-text hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
-            <LogOut className="w-5 h-5" aria-hidden="true" />
+        <div className="p-4 border-t border-white/5 space-y-3">
+          <div className="flex items-center gap-3 bg-white/5 p-3 rounded-2xl border border-white/5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-premium flex items-center justify-center text-white font-extrabold text-sm shadow-inner">
+              {userName.charAt(0)}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-extrabold text-xs text-white truncate">{userName}</p>
+              <p className="text-[10px] text-slate-400 truncate capitalize font-medium">Role: {role}</p>
+            </div>
+          </div>
+          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/10 transition-colors cursor-pointer text-xs font-bold">
+            <LogOut className="w-4 h-4" aria-hidden="true" />
             {t('logout')}
           </button>
         </div>
       </aside>
 
       {/* Sidebar Navigation */}
-      <aside className="w-64 theme-surface border-r theme-border hidden md:flex flex-col h-full shrink-0">
-        <div className="p-6 flex items-center gap-2 border-b theme-border">
+      <aside className="w-64 bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950 text-slate-300 border-r border-white/5 hidden md:flex flex-col h-full shrink-0">
+        <div className="p-6 flex items-center gap-2 border-b border-white/5">
           <BookOpen className="w-8 h-8 text-primary" aria-hidden="true" />
-          <span className="text-2xl font-bold theme-text">LAAMS</span>
+          <span className="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-400">LAAMS</span>
         </div>
 
         <div className="p-4 overflow-y-auto flex-1">
-          <p className="text-xs font-bold theme-text-muted uppercase tracking-wider mb-4 px-3">
+          <p className="text-xs font-extrabold text-slate-500 uppercase tracking-widest mb-4 px-3">
             {portalName}
           </p>
-          <nav className="space-y-1">
+          <nav className="space-y-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path || (location.pathname.startsWith(item.path) && item.path !== '/dashboard');
@@ -199,22 +208,31 @@ export const Dashboard: React.FC = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 border-l-4 ${isActive
-                    ? 'bg-gradient-to-r from-primary/10 to-indigo-500/5 text-primary border-primary font-bold shadow-sm'
-                    : 'theme-text border-transparent hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:translate-x-1'
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive
+                    ? 'bg-gradient-to-r from-primary to-indigo-600 text-white font-extrabold shadow-[0_4px_20px_rgba(170,59,255,0.25)] scale-[1.01]'
+                    : 'text-slate-400 hover:text-slate-100 hover:bg-white/5 hover:translate-x-1'
                     }`}
                 >
-                  <Icon className="w-5 h-5" aria-hidden="true" />
-                  {t(getTranslationKey(item.name))}
+                  <Icon className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+                  <span>{t(getTranslationKey(item.name))}</span>
                 </Link>
               );
             })}
           </nav>
         </div>
 
-        <div className="p-4 border-t theme-border">
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl theme-text hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
-            <LogOut className="w-5 h-5" aria-hidden="true" />
+        <div className="p-4 border-t border-white/5 space-y-3">
+          <div className="flex items-center gap-3 bg-white/5 p-3 rounded-2xl border border-white/5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-premium flex items-center justify-center text-white font-extrabold text-sm shadow-inner">
+              {userName.charAt(0)}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-extrabold text-xs text-white truncate">{userName}</p>
+              <p className="text-[10px] text-slate-400 truncate capitalize font-medium">Role: {role}</p>
+            </div>
+          </div>
+          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/10 transition-colors cursor-pointer text-xs font-bold">
+            <LogOut className="w-4 h-4" aria-hidden="true" />
             {t('logout')}
           </button>
         </div>

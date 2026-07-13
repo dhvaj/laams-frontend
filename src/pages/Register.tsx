@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, ArrowLeft, UserPlus, Loader2, ArrowRight, Check, GraduationCap, Users } from 'lucide-react';
+import { BookOpen, ArrowLeft, UserPlus, Loader2, ArrowRight, Check, GraduationCap, Users, Sparkles, Shield, Sliders, CheckSquare } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -53,7 +53,7 @@ export const Register: React.FC = () => {
   useEffect(() => {
     let announcement = '';
     if (step === 1) {
-      announcement = 'Step 1 of 3: Select account type. Student role button focused. Use left and right arrow keys to switch.';
+      announcement = 'Step 1 of 3: Select account type. Student role card focused. Use left and right arrow keys to switch.';
     } else if (step === 2) {
       announcement = role === 'student' 
         ? 'Step 2 of 3: Education and Special Needs. Grade selection dropdown focused.' 
@@ -233,55 +233,118 @@ export const Register: React.FC = () => {
   };
 
   return (
-    <main id="main-content" className="min-h-screen theme-bg flex flex-col justify-center py-16 sm:px-6 lg:px-8 transition-colors duration-300 relative overflow-hidden">
+    <main className="min-h-screen flex transition-colors duration-300 theme-bg relative overflow-hidden">
       {/* Offscreen assertive announcer for screen readers */}
       <div className="sr-only" aria-live="assertive" role="status">
         {srAnnouncement}
       </div>
-      
-      {/* Background blobs for premium depth */}
-      <div className="absolute top-1/10 left-1/10 w-96 h-96 rounded-full bg-primary/10 blur-3xl animate-float" style={{ animationDelay: '0s' }}></div>
-      <div className="absolute bottom-1/10 right-1/10 w-96 h-96 rounded-full bg-indigo-500/10 blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center">
-        <Link to="/" className="inline-flex items-center justify-center gap-2 mb-6 hover:opacity-80 transition-opacity">
-          <BookOpen className="w-12 h-12 text-primary" aria-hidden="true" />
-          <span className="text-4xl font-extrabold theme-text tracking-tight">LAAMS</span>
-        </Link>
-        <h1 className="text-3xl sm:text-4xl font-extrabold theme-text tracking-tight px-4">
-          Create Your Account
-        </h1>
-        <p className="mt-3 text-sm theme-text-muted">
-          Already registered?{' '}
-          <Link to="/login" className="font-semibold text-primary hover:underline transition-all">
-            Sign in here
+      {/* LEFT PANEL: Branding & Onboarding Graphics */}
+      <section className="hidden lg:flex w-5/12 bg-gradient-to-tr from-gray-950 via-slate-900 to-indigo-950 text-white p-12 flex-col justify-between relative overflow-hidden select-none border-r border-white/5 shadow-2xl">
+        {/* Glow blobs in left panel */}
+        <div className="absolute top-[-10%] left-[-10%] w-96 h-96 rounded-full bg-primary/20 blur-[100px]"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 rounded-full bg-indigo-500/20 blur-[100px]"></div>
+
+        <div className="relative z-10">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-85 transition-opacity">
+            <BookOpen className="w-10 h-10 text-primary" aria-hidden="true" />
+            <span className="text-3xl font-extrabold tracking-tight">LAAMS</span>
           </Link>
-        </p>
-      </div>
+        </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-3xl relative z-10 px-4 sm:px-0">
-        <div className="glass-panel p-8 sm:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.35)] border border-white/10 dark:border-white/5 rounded-3xl backdrop-blur-xl bg-white/40 dark:bg-gray-950/40 transition-all duration-500 hover:shadow-[0_25px_55px_rgba(0,0,0,0.2)]">
+        <div className="my-auto space-y-8 relative z-10">
+          <div className="space-y-4">
+            <span className="px-3 py-1 bg-primary/10 border border-primary/25 rounded-full text-xs font-bold text-primary inline-flex items-center gap-1.5 uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" /> Inclusive Learning
+            </span>
+            <h2 className="text-4xl xl:text-5xl font-extrabold leading-tight tracking-tight">
+              Personalized Education, <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-400">Without Boundaries</span>
+            </h2>
+            <p className="text-slate-400 text-sm xl:text-base leading-relaxed max-w-md">
+              LAAMS adapts content formats, spacing, and interaction parameters based on each student's unique accessibility profile.
+            </p>
+          </div>
+
+          {/* Interactive Feature Pills */}
+          <div className="space-y-3.5">
+            <div className="flex items-center gap-3.5 bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-md">
+              <Shield className="w-6 h-6 text-primary flex-shrink-0" />
+              <div>
+                <h4 className="font-bold text-sm">Strict compliance</h4>
+                <p className="text-xs text-slate-400 mt-0.5">Built according to WCAG 2.1 & CWSN guidelines</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3.5 bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-md">
+              <Sliders className="w-6 h-6 text-primary flex-shrink-0" />
+              <div>
+                <h4 className="font-bold text-sm">Dynamic personalization</h4>
+                <p className="text-xs text-slate-400 mt-0.5">Adaptable fonts, layouts, audio cues, and spacing</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3.5 bg-white/5 border border-white/10 p-3.5 rounded-2xl backdrop-blur-md">
+              <CheckSquare className="w-6 h-6 text-primary flex-shrink-0" />
+              <div>
+                <h4 className="font-bold text-sm">Linked Parent Portal</h4>
+                <p className="text-xs text-slate-400 mt-0.5">Easy review of child's learning metrics & reports</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative z-10 text-xs text-slate-500 font-medium">
+          © {new Date().getFullYear()} LAAMS Adaptive LMS. All Rights Reserved.
+        </div>
+      </section>
+
+      {/* RIGHT PANEL: Spacious Form Area */}
+      <section className="w-full lg:w-7/12 flex flex-col justify-center py-12 px-6 sm:px-12 xl:px-20 overflow-y-auto max-h-screen relative z-10">
+        
+        {/* Glow blobs for background aesthetic (visible on mobile too) */}
+        <div className="lg:hidden absolute top-[-10%] right-[-10%] w-72 h-72 rounded-full bg-primary/10 blur-[80px]"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-72 h-72 rounded-full bg-indigo-500/10 blur-[80px]"></div>
+
+        <div className="max-w-xl w-full mx-auto space-y-8 relative z-10">
           
-          {/* Stepper progress indicator */}
-          <div className="flex justify-between items-center mb-10 px-2 sm:px-6">
+          {/* Header Mobile Logo & Titles */}
+          <div className="space-y-2">
+            <div className="lg:hidden flex items-center gap-2 mb-4 justify-center">
+              <BookOpen className="w-8 h-8 text-primary" aria-hidden="true" />
+              <span className="text-2xl font-bold theme-text">LAAMS</span>
+            </div>
+            <h2 className="text-3xl font-extrabold theme-text tracking-tight text-center lg:text-left">
+              Create Your Account
+            </h2>
+            <p className="text-sm theme-text-muted text-center lg:text-left">
+              Already registered?{' '}
+              <Link to="/login" className="font-semibold text-primary hover:underline">
+                Sign in here
+              </Link>
+            </p>
+          </div>
+
+          {/* Stepper Progress bar */}
+          <div className="flex justify-between items-center bg-gray-50/50 dark:bg-gray-900/20 border theme-border p-4 rounded-2xl">
             {[1, 2, 3].map((num) => (
               <div key={num} className="flex items-center">
-                <div className="flex flex-col items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
+                <div className="flex items-center gap-2">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 ${
                     step === num 
-                      ? 'bg-primary text-white ring-4 ring-primary/20 scale-110' 
+                      ? 'bg-primary text-white ring-4 ring-primary/20 scale-105 shadow-sm' 
                       : step > num 
                         ? 'bg-green-500 text-white' 
-                        : 'bg-gray-200/80 dark:bg-gray-800/80 theme-text-muted'
+                        : 'bg-gray-250 dark:bg-gray-800 theme-text-muted border theme-border'
                   }`}>
-                    {step > num ? <Check className="w-5 h-5" /> : num}
+                    {step > num ? <Check className="w-4 h-4" /> : num}
                   </div>
-                  <span className="text-[10px] sm:text-xs font-semibold theme-text-muted mt-2 uppercase tracking-wider">
+                  <span className={`hidden sm:inline text-xs font-bold uppercase tracking-wider ${step === num ? 'theme-text' : 'theme-text-muted'}`}>
                     {num === 1 ? 'Details' : num === 2 ? 'Profile' : 'Verify'}
                   </span>
                 </div>
                 {num < 3 && (
-                  <div className={`w-20 sm:w-44 h-1 mx-2 sm:mx-4 -mt-5 transition-all duration-500 rounded-full ${
+                  <div className={`w-12 sm:w-20 h-0.5 mx-2 rounded-full transition-all duration-500 ${
                     step > num ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-800'
                   }`} />
                 )}
@@ -290,38 +353,40 @@ export const Register: React.FC = () => {
           </div>
 
           {error && (
-            <div className="mb-8 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 p-4 rounded-xl text-sm border border-red-200 dark:border-red-900/50 text-center font-medium shadow-sm animate-scale-up">
+            <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 text-red-600 dark:text-red-400 p-4 rounded-2xl text-sm font-semibold shadow-sm animate-scale-up text-center">
               {error}
             </div>
           )}
 
-          <form className="space-y-8" onSubmit={handleRegister}>
+          <form onSubmit={handleRegister} className="space-y-6">
             
             {/* STEP 1: Basic Information */}
             {step === 1 && (
               <div className="space-y-6 animate-fade-in">
                 
-                {/* Premium Role Selection Cards */}
+                {/* Premium Interactive Role Selection Cards */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-3 text-center sm:text-left">
-                    Choose Your Role <span className="text-red-500">*</span>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-3.5">
+                    Account Type <span className="text-red-500">*</span>
                   </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <button
                       id="role-student"
                       type="button"
                       role="radio"
                       aria-checked={role === 'student'}
-                      onClick={() => { setRole('student'); }}
-                      className={`flex flex-col items-center justify-center p-8 rounded-2xl border text-center transition-all duration-300 cursor-pointer ${
+                      onClick={() => setRole('student')}
+                      className={`flex items-center gap-3.5 p-4 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
                         role === 'student'
-                          ? 'border-primary bg-primary/5 dark:bg-primary/10 ring-2 ring-primary/30 scale-102 shadow-md'
+                          ? 'border-primary bg-primary/5 dark:bg-primary/10 ring-2 ring-primary/30 scale-[1.01] shadow-sm'
                           : 'border-gray-200/50 dark:border-gray-800/50 bg-white/20 dark:bg-gray-950/20 hover:bg-white/40 dark:hover:bg-gray-950/40'
                       }`}
                     >
-                      <GraduationCap className={`w-12 h-12 mb-3 transition-colors ${role === 'student' ? 'text-primary' : 'theme-text-muted'}`} />
-                      <span className="theme-text font-extrabold text-lg">Student Profile</span>
-                      <span className="text-xs theme-text-muted mt-1.5 max-w-[200px]">For learners seeking adaptive courses & CWSN support</span>
+                      <GraduationCap className={`w-8 h-8 flex-shrink-0 ${role === 'student' ? 'text-primary' : 'theme-text-muted'}`} />
+                      <div>
+                        <span className="theme-text font-extrabold text-sm block">Student</span>
+                        <span className="text-[10px] theme-text-muted mt-0.5 block">Adaptive learning dashboard</span>
+                      </div>
                     </button>
                     
                     <button
@@ -329,22 +394,24 @@ export const Register: React.FC = () => {
                       type="button"
                       role="radio"
                       aria-checked={role === 'teacher'}
-                      onClick={() => { setRole('teacher'); }}
-                      className={`flex flex-col items-center justify-center p-8 rounded-2xl border text-center transition-all duration-300 cursor-pointer ${
+                      onClick={() => setRole('teacher')}
+                      className={`flex items-center gap-3.5 p-4 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
                         role === 'teacher'
-                          ? 'border-primary bg-primary/5 dark:bg-primary/10 ring-2 ring-primary/30 scale-102 shadow-md'
+                          ? 'border-primary bg-primary/5 dark:bg-primary/10 ring-2 ring-primary/30 scale-[1.01] shadow-sm'
                           : 'border-gray-200/50 dark:border-gray-800/50 bg-white/20 dark:bg-gray-950/20 hover:bg-white/40 dark:hover:bg-gray-950/40'
                       }`}
                     >
-                      <Users className={`w-12 h-12 mb-3 transition-colors ${role === 'teacher' ? 'text-primary' : 'theme-text-muted'}`} />
-                      <span className="theme-text font-extrabold text-lg">Teacher Profile</span>
-                      <span className="text-xs theme-text-muted mt-1.5 max-w-[200px]">For educators managing classes & reading student adaptive reports</span>
+                      <Users className={`w-8 h-8 flex-shrink-0 ${role === 'teacher' ? 'text-primary' : 'theme-text-muted'}`} />
+                      <div>
+                        <span className="theme-text font-extrabold text-sm block">Teacher</span>
+                        <span className="text-[10px] theme-text-muted mt-0.5 block">Reports & compliance logs</span>
+                      </div>
                     </button>
                   </div>
                 </div>
 
-                <div className="border-t theme-border pt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t theme-border pt-5">
+                  <div className="space-y-1.5">
                     <label htmlFor="firstName" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       First Name <span className="text-red-500">*</span>
                     </label>
@@ -354,11 +421,11 @@ export const Register: React.FC = () => {
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
                       placeholder="John"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="lastName" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       Last Name <span className="text-red-500">*</span>
                     </label>
@@ -368,13 +435,13 @@ export const Register: React.FC = () => {
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
                       placeholder="Doe"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
                     <label htmlFor="mobile" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       Mobile Number <span className="text-red-500">*</span>
                     </label>
@@ -384,11 +451,11 @@ export const Register: React.FC = () => {
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
                       placeholder="9876543210"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       Email Address {role === 'student' ? '(Optional)' : <span className="text-red-500">*</span>}
                     </label>
@@ -398,13 +465,13 @@ export const Register: React.FC = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="john@school.edu"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
                     <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       Password <span className="text-red-500">*</span>
                     </label>
@@ -414,11 +481,11 @@ export const Register: React.FC = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="confirmPassword" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       Confirm Password <span className="text-red-500">*</span>
                     </label>
@@ -428,7 +495,7 @@ export const Register: React.FC = () => {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
                 </div>
@@ -438,10 +505,10 @@ export const Register: React.FC = () => {
             {/* STEP 2: Education / Special Needs (STUDENT) */}
             {step === 2 && role === 'student' && (
               <div className="space-y-6 animate-fade-in">
-                <h3 className="text-xl font-bold theme-text border-b theme-border pb-3 mb-6">Education & Special Needs</h3>
+                <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Education & Accessibility</h3>
 
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
                     <label htmlFor="gradeLevel" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       Class / Grade <span className="text-red-500">*</span>
                     </label>
@@ -449,7 +516,7 @@ export const Register: React.FC = () => {
                       id="gradeLevel"
                       value={gradeLevel}
                       onChange={(e) => setGradeLevel(e.target.value)}
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-350"
                     >
                       <option value="" disabled className="dark:bg-gray-900">Select Grade...</option>
                       {Array.from({ length: 12 }, (_, i) => i + 1).map((grade) => (
@@ -458,7 +525,7 @@ export const Register: React.FC = () => {
                     </select>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="schoolName" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       School / College Name
                     </label>
@@ -468,13 +535,13 @@ export const Register: React.FC = () => {
                       value={schoolName}
                       onChange={(e) => setSchoolName(e.target.value)}
                       placeholder="Central High School"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
                     <label htmlFor="udiseCode" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       School UDISE Code
                     </label>
@@ -484,11 +551,11 @@ export const Register: React.FC = () => {
                       value={udiseCode}
                       onChange={(e) => setUdiseCode(e.target.value)}
                       placeholder="27220100101"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="apparNumber" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       Student APAAR Number (Optional)
                     </label>
@@ -497,19 +564,19 @@ export const Register: React.FC = () => {
                       type="text"
                       value={apparNumber}
                       onChange={(e) => setApparNumber(e.target.value)}
-                      placeholder="12-digit APAAR code"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      placeholder="12-digit number"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
                 </div>
 
-                <div className="bg-primary/5 p-6 rounded-2xl border border-primary/25 space-y-4">
+                <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 space-y-4">
                   <div className="space-y-1">
                     <label htmlFor="disability" className="block text-sm font-extrabold theme-text">
-                      Accessibility Profile / Special Need <span className="text-red-500">*</span>
+                      Accessibility Adaptations <span className="text-red-500">*</span>
                     </label>
                     <p className="text-xs theme-text-muted">
-                      LAAMS dynamically customizes learning modules & interfaces based on your CWSN profile.
+                      Select your profile to automatically personalize layouts and interaction spacing.
                     </p>
                   </div>
                   <select
@@ -518,18 +585,18 @@ export const Register: React.FC = () => {
                     onChange={(e) => setSpecialNeed(e.target.value)}
                     className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-transparent theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50"
                   >
-                    <option value="" disabled className="dark:bg-gray-900">Select accessibility profile...</option>
-                    <option value="typical" className="dark:bg-gray-900">Typical Learning Profile (Standard)</option>
+                    <option value="" disabled className="dark:bg-gray-900">Select profile...</option>
+                    <option value="typical" className="dark:bg-gray-900">Typical Learning Profile</option>
                     {disabilitiesList.slice(0, -1).map(d => (
                       <option key={d.value} value={d.value} className="dark:bg-gray-900">{d.label}</option>
                     ))}
-                    <option value="other" className="dark:bg-gray-900">Other (Custom specification)</option>
+                    <option value="other" className="dark:bg-gray-900">Other (Detail below)</option>
                   </select>
 
                   {specialNeed === 'other' && (
                     <div className="mt-4 animate-scale-up space-y-2">
                       <label htmlFor="otherNeedText" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                        Describe Special Needs / Accommodations <span className="text-red-500">*</span>
+                        Accommodations description <span className="text-red-500">*</span>
                       </label>
                       <textarea
                         id="otherNeedText"
@@ -537,7 +604,7 @@ export const Register: React.FC = () => {
                         onChange={(e) => setOtherNeedText(e.target.value)}
                         rows={3}
                         className="block w-full px-4 py-3 text-sm theme-border rounded-xl bg-transparent theme-text border focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
-                        placeholder="Please detail your accessibility needs..."
+                        placeholder="Detail specific accessibility tools or adaptations needed..."
                       />
                     </div>
                   )}
@@ -548,10 +615,10 @@ export const Register: React.FC = () => {
             {/* STEP 2: Professional Details (TEACHER) */}
             {step === 2 && role === 'teacher' && (
               <div className="space-y-6 animate-fade-in">
-                <h3 className="text-xl font-bold theme-text border-b theme-border pb-3 mb-6">Professional Information</h3>
+                <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Professional Information</h3>
 
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
                     <label htmlFor="subjectsTaught" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       Subjects Taught <span className="text-red-500">*</span>
                     </label>
@@ -560,12 +627,12 @@ export const Register: React.FC = () => {
                       type="text"
                       value={subjectsTaught}
                       onChange={(e) => setSubjectsTaught(e.target.value)}
-                      placeholder="Science, Mathematics, English"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      placeholder="Science, History"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="specialization" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       Specialization
                     </label>
@@ -575,32 +642,32 @@ export const Register: React.FC = () => {
                       value={specialization}
                       onChange={(e) => setSpecialization(e.target.value)}
                       placeholder="Inclusive STEM, Special Ed"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <label htmlFor="organization" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                    Current School / Organization Name <span className="text-red-500">*</span>
+                    Current School / Organization <span className="text-red-500">*</span>
                   </label>
                   <input
                     id="organization"
                     type="text"
                     value={organization}
                     onChange={(e) => setOrganization(e.target.value)}
-                    placeholder="St. Mary's Public School"
-                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                    placeholder="St. Mary's School"
+                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                   />
                 </div>
 
-                <div className="bg-primary/5 p-6 rounded-2xl border border-primary/25 space-y-4">
+                <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 space-y-4">
                   <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                     <div className="space-y-0.5">
                       <label className="block text-sm font-extrabold theme-text">
                         Accessibility & Inclusion Experience
                       </label>
-                      <span className="text-xs theme-text-muted block">Have you worked with Children with Special Needs (CWSN)?</span>
+                      <span className="text-xs theme-text-muted">Do you have experience with CWSN students?</span>
                     </div>
                     <div className="flex gap-4">
                       <label className="flex items-center gap-2 cursor-pointer select-none">
@@ -627,11 +694,11 @@ export const Register: React.FC = () => {
                   </div>
 
                   {cwsnExperience && (
-                    <div className="animate-scale-up pt-4 border-t theme-border">
-                      <span className="block text-xs font-bold uppercase tracking-wider text-primary mb-3">
+                    <div className="animate-scale-up pt-4 border-t theme-border space-y-3">
+                      <span className="block text-xs font-bold uppercase tracking-wider text-primary">
                         Disabilities Worked With (Select all that apply)
                       </span>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
                         {disabilitiesList.slice(0, -1).map(d => (
                           <label key={d.value} className="flex items-center gap-3 text-sm theme-text cursor-pointer select-none">
                             <input 
@@ -653,15 +720,15 @@ export const Register: React.FC = () => {
             {/* STEP 3: Parent / Guardian Account Info (STUDENT) */}
             {step === 3 && role === 'student' && (
               <div className="space-y-6 animate-fade-in">
-                <h3 className="text-xl font-bold theme-text border-b theme-border pb-3 mb-2">Parent / Guardian Account Link</h3>
-                <p className="text-xs theme-text-muted mb-6">
-                  Adding your Parent details creates a linked Parent portal account so they can track updates, adaptation reports, and learning achievements.
+                <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Parent / Guardian Portal Account</h3>
+                <p className="text-xs theme-text-muted mb-4">
+                  Define credentials for your Parent/Guardian. They will get a linked log-in to view reports, adaptive progress, and course activities.
                 </p>
 
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
                     <label htmlFor="parentName" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Parent / Guardian Full Name <span className="text-red-500">*</span>
+                      Parent / Guardian Name <span className="text-red-500">*</span>
                     </label>
                     <input
                       id="parentName"
@@ -669,11 +736,11 @@ export const Register: React.FC = () => {
                       value={parentName}
                       onChange={(e) => setParentName(e.target.value)}
                       placeholder="Sarah Doe"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="parentMobile" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       Parent Mobile Number <span className="text-red-500">*</span>
                     </label>
@@ -683,12 +750,12 @@ export const Register: React.FC = () => {
                       value={parentMobile}
                       onChange={(e) => setParentMobile(e.target.value)}
                       placeholder="9876543211"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <label htmlFor="parentEmail" className="block text-xs font-bold uppercase tracking-wider text-primary">
                     Parent Email Address (Optional but recommended)
                   </label>
@@ -698,14 +765,14 @@ export const Register: React.FC = () => {
                     value={parentEmail}
                     onChange={(e) => setParentEmail(e.target.value)}
                     placeholder="parent@home.com"
-                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
                     <label htmlFor="parentPassword" className="block text-xs font-bold uppercase tracking-wider text-primary">
-                      Parent Portal Password <span className="text-red-500">*</span>
+                      Parent Account Password <span className="text-red-500">*</span>
                     </label>
                     <input
                       id="parentPassword"
@@ -713,11 +780,11 @@ export const Register: React.FC = () => {
                       value={parentPassword}
                       onChange={(e) => setParentPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <label htmlFor="parentConfirmPassword" className="block text-xs font-bold uppercase tracking-wider text-primary">
                       Confirm Parent Password <span className="text-red-500">*</span>
                     </label>
@@ -727,7 +794,7 @@ export const Register: React.FC = () => {
                       value={parentConfirmPassword}
                       onChange={(e) => setParentConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                      className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                     />
                   </div>
                 </div>
@@ -737,15 +804,15 @@ export const Register: React.FC = () => {
             {/* STEP 3: Contact & Disability Info (TEACHER) */}
             {step === 3 && role === 'teacher' && (
               <div className="space-y-6 animate-fade-in">
-                <h3 className="text-xl font-bold theme-text border-b theme-border pb-3 mb-6">Contact & Accommodations</h3>
+                <h3 className="text-lg font-bold theme-text border-b theme-border pb-2.5">Contact Details & Accommodations</h3>
 
-                <div className="bg-primary/5 p-6 rounded-2xl border border-primary/25 space-y-4">
+                <div className="bg-primary/5 p-5 rounded-2xl border border-primary/20 space-y-4">
                   <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                     <div className="space-y-0.5">
                       <label className="block text-sm font-extrabold theme-text">
                         Personal Accommodations
                       </label>
-                      <span className="text-xs theme-text-muted block">Do you have a personal disability/special need?</span>
+                      <span className="text-xs theme-text-muted">Do you have a personal disability/special need?</span>
                     </div>
                     <div className="flex gap-4">
                       <label className="flex items-center gap-2 cursor-pointer select-none">
@@ -791,7 +858,7 @@ export const Register: React.FC = () => {
                   )}
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <label htmlFor="address" className="block text-xs font-bold uppercase tracking-wider text-primary">
                     Contact Address <span className="text-red-500">*</span>
                   </label>
@@ -801,11 +868,11 @@ export const Register: React.FC = () => {
                     onChange={(e) => setAddress(e.target.value)}
                     rows={3}
                     placeholder="123 Teacher's Lane, City Center"
-                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <label htmlFor="emergencyContact" className="block text-xs font-bold uppercase tracking-wider text-primary">
                     Emergency Contact Number <span className="text-red-500">*</span>
                   </label>
@@ -815,46 +882,46 @@ export const Register: React.FC = () => {
                     value={emergencyContact}
                     onChange={(e) => setEmergencyContact(e.target.value)}
                     placeholder="9876543219"
-                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-200/50 dark:border-gray-800/50 rounded-2xl px-5 py-3.5 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
+                    className="w-full bg-white/40 dark:bg-gray-950/40 border border-gray-250 dark:border-gray-800 rounded-xl px-4 py-3 theme-text text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-300"
                   />
                 </div>
               </div>
             )}
 
             {/* Navigation buttons */}
-            <div className="flex gap-4 pt-6 border-t theme-border">
+            <div className="flex gap-4 pt-5 border-t theme-border">
               {step > 1 && (
-                <Button type="button" variant="outline" className="flex-1 py-3.5 font-bold rounded-2xl" onClick={prevStep}>
+                <Button type="button" variant="outline" className="flex-1 py-3 font-bold rounded-xl text-sm" onClick={prevStep}>
                   Back
                 </Button>
               )}
               
               {step < 3 ? (
-                <Button type="button" fullWidth={step === 1} className="flex-1 gap-2 py-3.5 font-bold rounded-2xl" onClick={nextStep}>
+                <Button type="button" fullWidth={step === 1} className="flex-1 gap-2 py-3 font-bold rounded-xl text-sm" onClick={nextStep}>
                   Next Step
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               ) : (
-                <Button type="submit" className="flex-1 gap-2 py-3.5 font-bold rounded-2xl" disabled={isSubmitting}>
+                <Button type="submit" className="flex-1 gap-2 py-3 font-bold rounded-xl text-sm" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
                   ) : (
                     <UserPlus className="w-5 h-5" aria-hidden="true" />
                   )}
-                  {isSubmitting ? 'Registering Account...' : 'Register Account'}
+                  {isSubmitting ? 'Registering...' : 'Register Account'}
                 </Button>
               )}
             </div>
           </form>
 
-          <div className="mt-8 border-t theme-border pt-6 flex justify-center">
+          <div className="pt-4 flex justify-center">
             <Link to="/" className="flex items-center gap-2 text-sm theme-text-muted hover:text-primary transition-colors font-medium">
               <ArrowLeft className="w-4 h-4" aria-hidden="true" />
               Back to home page
             </Link>
           </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 };

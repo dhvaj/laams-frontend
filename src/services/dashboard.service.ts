@@ -264,6 +264,9 @@ export const dashboardService = {
   createClass: async (classData: any): Promise<any> => {
     return writeJson('classes', 'POST', classData);
   },
+  updateClass: async (id: string, updates: any): Promise<any> => {
+    return writeJson(`classes/${id}`, 'PATCH', updates);
+  },
 
   // Parent Data
   getParentProgress: async (): Promise<SubjectProgress[]> => {

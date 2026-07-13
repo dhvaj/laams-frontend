@@ -1171,6 +1171,15 @@ const ClassManagement = () => {
     }
   };
 
+  const handleUpdateClassTeacher = async (classId: string, teacherId: string) => {
+    try {
+      await dashboardService.updateClass(classId, { teacherId: teacherId || null });
+      setClassesList(prev => prev.map(c => c.id === classId ? { ...c, teacherId: teacherId || null } : c));
+    } catch (err) {
+      console.error('Failed to assign teacher to class', err);
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fade-in max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b theme-border pb-5">
@@ -1203,7 +1212,6 @@ const ClassManagement = () => {
               </thead>
               <tbody className="divide-y theme-border theme-text">
                 {classesList.map((c) => {
-                  const teacher = teachersList.find(t => t.id === c.teacherId);
                   return (
                     <tr key={c.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/10 transition-colors group">
                       <td className="p-4 font-bold text-sm">
@@ -1215,7 +1223,18 @@ const ClassManagement = () => {
                         </div>
                       </td>
                       <td className="p-4 text-xs theme-text-muted font-semibold">{c.focus}</td>
-                      <td className="p-4 text-sm font-semibold">{teacher ? `${teacher.firstName} ${teacher.lastName}` : <span className="text-amber-500 font-bold">Unassigned</span>}</td>
+                      <td className="p-4">
+                        <select
+                          value={c.teacherId || ''}
+                          onChange={(e) => handleUpdateClassTeacher(c.id, e.target.value)}
+                          className="px-3 py-1.5 border theme-border rounded-xl bg-gray-50 dark:bg-gray-900 theme-text text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer font-semibold min-w-[160px]"
+                        >
+                          <option value="">Unassigned</option>
+                          {teachersList.map(t => (
+                            <option key={t.id} value={t.id}>{t.firstName} {t.lastName}</option>
+                          ))}
+                        </select>
+                      </td>
                       <td className="p-4">
                         <span className="bg-gray-100 dark:bg-gray-800/80 border theme-border px-3 py-1 rounded-full text-xs font-bold theme-text-muted">
                           {c.studentCount} {c.studentCount === 1 ? 'Student' : 'Students'}

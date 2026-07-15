@@ -96,11 +96,18 @@ export const dashboardService = {
     formData.append('file', file);
     
     const response = await fetch(`${API_URL}/books`, {
-              method: 'POST',
+        method: 'POST',
         headers: { ...getAuthHeader() },
         body: formData,
     });
-    if (!response.ok) throw new Error('Failed to create book');
+    if (!response.ok) {
+      let errMsg = 'Failed to create book';
+      try {
+        const errorData = await response.json();
+        if (errorData && errorData.error) errMsg = errorData.error;
+      } catch (e) {}
+      throw new Error(errMsg);
+    }
     return await response.json();
   },
   getBooks: async (): Promise<any[]> => {
@@ -120,11 +127,18 @@ export const dashboardService = {
       formData.append('file', file);
       
       const response = await fetch(`${API_URL}/studyMaterials`, {
-                method: 'POST',
-        headers: { ...getAuthHeader() },
-        body: formData,
+          method: 'POST',
+          headers: { ...getAuthHeader() },
+          body: formData,
       });
-      if (!response.ok) throw new Error('Failed to create study material with file');
+      if (!response.ok) {
+        let errMsg = 'Failed to create study material with file';
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.error) errMsg = errorData.error;
+        } catch (e) {}
+        throw new Error(errMsg);
+      }
       return await response.json();
     }
     return writeJson('studyMaterials', 'POST', { ...material, teacherId: getCurrentUserId() || '2' });

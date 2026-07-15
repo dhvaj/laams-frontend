@@ -488,8 +488,9 @@ const ContentHub = () => {
         setFiles([]);
         loadContent();
         setTimeout(() => setIsSuccess(false), 3000);
-      } catch (err) {
+      } catch (err: any) {
         console.error('Failed to create content', err);
+        alert('Upload failed: ' + (err.message || 'Unknown error') + '\n\nPlease verify that the backend changes were pulled and restarted on the VPS, and that the file size is within limits.');
       } finally {
         setIsSubmitting(false);
       }

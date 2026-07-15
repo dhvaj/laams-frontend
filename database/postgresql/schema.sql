@@ -358,10 +358,22 @@ CREATE TABLE IF NOT EXISTS file_assets (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS books (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  class_id uuid REFERENCES classes(id) ON DELETE CASCADE,
+  title varchar(255) NOT NULL,
+  subject varchar(255) NOT NULL,
+  uploaded_by uuid REFERENCES users(id) ON DELETE SET NULL,
+  cover_image_url text,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS study_materials (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   class_id uuid REFERENCES classes(id) ON DELETE CASCADE,
   lesson_id uuid REFERENCES lessons(id) ON DELETE SET NULL,
+  book_id uuid REFERENCES books(id) ON DELETE CASCADE,
+  chapter_number integer,
   uploaded_by uuid REFERENCES users(id) ON DELETE SET NULL,
   title text NOT NULL,
   subject text NOT NULL,

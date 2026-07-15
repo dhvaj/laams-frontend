@@ -34,9 +34,9 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Sync profile with user's registered accessibility profile
   useEffect(() => {
-    if (user && user.profileId) {
-      setProfile(user.profileId as AccessibilityProfile);
-    } else if (!user) {
+    if (user) {
+      setProfile((user.profileId || 'typical') as AccessibilityProfile);
+    } else {
       const savedProfile = localStorage.getItem('laams-a11y-profile') as AccessibilityProfile;
       if (savedProfile) setProfile(savedProfile);
     }

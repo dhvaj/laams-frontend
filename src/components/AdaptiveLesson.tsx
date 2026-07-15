@@ -613,7 +613,7 @@ export const AdaptiveLesson: React.FC = () => {
   const [showSpeechSettings, setShowSpeechSettings] = useState(false);
   const [speechRate, setSpeechRate] = useState(1.0);
   const [selectedVoiceURI, setSelectedVoiceURI] = useState<string>('');
-  const [voicesList, setVoicesList] = useState<SpeechSynthesisVoice[]>([]);
+  const [voicesList, setVoicesList] = useState<{ name: string; lang: string; voiceURI: string }[]>([]);
   
   // Refs to avoid stale closure state in speech loops
   const isPlayingRef = useRef(false);
@@ -721,20 +721,28 @@ export const AdaptiveLesson: React.FC = () => {
       try {
         if (typeof window.speechSynthesis.getVoices !== 'function') return;
         const allVoices = window.speechSynthesis.getVoices() || [];
-        setVoicesList(allVoices);
+        
+        // Map to a clean, serializable array of objects to avoid React native-object reconciliation crash
+        const serializableVoices = allVoices.map(v => ({
+          name: v.name || '',
+          lang: v.lang || '',
+          voiceURI: v.voiceURI || ''
+        }));
+        
+        setVoicesList(serializableVoices);
         
         // Default to Indian English or Hindi if possible
         const isHindi = i18n.language === 'hi';
         let defaultVoice = null;
         if (isHindi) {
-          defaultVoice = allVoices.find(v => v.lang && (v.lang.startsWith('hi-IN') || v.lang.startsWith('hi')));
+          defaultVoice = serializableVoices.find(v => v.lang && (v.lang.startsWith('hi-IN') || v.lang.startsWith('hi')));
         } else {
-          defaultVoice = allVoices.find(v => v.lang && (v.lang.startsWith('en-IN') || v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('indian')));
+          defaultVoice = serializableVoices.find(v => v.lang && (v.lang.startsWith('en-IN') || v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('indian')));
         }
         if (defaultVoice) {
           setSelectedVoiceURI(defaultVoice.voiceURI);
-        } else if (allVoices.length > 0) {
-          setSelectedVoiceURI(allVoices[0].voiceURI);
+        } else if (serializableVoices.length > 0) {
+          setSelectedVoiceURI(serializableVoices[0].voiceURI);
         }
       } catch (err) {
         console.warn('SpeechSynthesis getVoices failed:', err);

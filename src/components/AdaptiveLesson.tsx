@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { ChevronRight, Play, Volume2, Download, Sparkles, BookOpen, RefreshCw, Headphones, Award, VolumeX, Music, Pause, Settings } from 'lucide-react';
 import { useAccessibility } from '../contexts/AccessibilityContext';
@@ -614,6 +614,32 @@ export const AdaptiveLesson: React.FC = () => {
   const [speechRate, setSpeechRate] = useState(1.0);
   const [selectedVoiceURI, setSelectedVoiceURI] = useState<string>('');
   const [voicesList, setVoicesList] = useState<SpeechSynthesisVoice[]>([]);
+  
+  // Refs to avoid stale closure state in speech loops
+  const isPlayingRef = useRef(false);
+  const isPausedRef = useRef(false);
+  const speechRateRef = useRef(1.0);
+  const selectedVoiceURIRef = useRef('');
+  const currentSentenceIndexRef = useRef(0);
+  const sentencesRef = useRef<string[]>([]);
+
+  // Sync state values with refs
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
+
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
+
+  useEffect(() => {
+    speechRateRef.current = speechRate;
+  }, [speechRate]);
+
+  useEffect(() => {
+    selectedVoiceURIRef.current = selectedVoiceURI;
+  }, [selectedVoiceURI]);
+
   const [isFlipped, setIsFlipped] = useState(false);
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
   const [focusSound, setFocusSound] = useState<'off' | 'brown' | 'rain' | 'ocean'>('off');
@@ -840,14 +866,55 @@ export const AdaptiveLesson: React.FC = () => {
   const isSimpleLayout = adaptedLesson.layout === 'simple-picture-first' && !isStepLayout;
   const showReadAloud = true; // Survey feedback: make read-aloud options available to all learners
 
+  const speakCurrent = () => {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+
+    const sentences = sentencesRef.current;
+    const currentIndex = currentSentenceIndexRef.current;
+
+    if (currentIndex >= sentences.length) {
+      setIsPlaying(false);
+      setIsPaused(false);
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(sentences[currentIndex]);
+    const voices = window.speechSynthesis.getVoices();
+    const selectedVoice = voices.find(v => v.voiceURI === selectedVoiceURIRef.current);
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    }
+    utterance.rate = speechRateRef.current;
+
+    utterance.onend = () => {
+      if (isPausedRef.current) return;
+      currentSentenceIndexRef.current += 1;
+      speakCurrent();
+    };
+
+    utterance.onerror = (e) => {
+      console.error('SpeechSynthesis error:', e);
+      if (isPlayingRef.current && e.error !== 'interrupted') {
+        setIsPlaying(false);
+        setIsPaused(false);
+      }
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
+
   const handlePauseResume = () => {
     if (!('speechSynthesis' in window) || !isPlaying) return;
+    
     if (isPaused) {
-      window.speechSynthesis.resume();
       setIsPaused(false);
+      isPausedRef.current = false;
+      speakCurrent();
     } else {
-      window.speechSynthesis.pause();
+      window.speechSynthesis.cancel(); // Interrupt current utterance
       setIsPaused(true);
+      isPausedRef.current = true;
     }
   };
 
@@ -860,6 +927,7 @@ export const AdaptiveLesson: React.FC = () => {
     if (isPlaying) {
       window.speechSynthesis.cancel();
       setIsPlaying(false);
+      setIsPaused(false);
       return;
     }
 
@@ -870,51 +938,25 @@ export const AdaptiveLesson: React.FC = () => {
 
     if (!speechText.trim()) return;
 
-    window.speechSynthesis.cancel();
-    
-    // Split into sentences to prevent the browser/Chrome 15s timeout speaking bug
     const sentences = speechText.split(/[.!?]+\s+/).filter(Boolean);
-    let currentIndex = 0;
+    sentencesRef.current = sentences;
+    currentSentenceIndexRef.current = 0;
+    
     setIsPlaying(true);
-
-    const speakNext = () => {
-      if (currentIndex >= sentences.length) {
-        setIsPlaying(false);
-        return;
-      }
-
-      const utterance = new SpeechSynthesisUtterance(sentences[currentIndex]);
-      const voices = window.speechSynthesis.getVoices();
-      const selectedVoice = voices.find(v => v.voiceURI === selectedVoiceURI);
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-      }
-      utterance.rate = speechRate;
-
-      utterance.onend = () => {
-        currentIndex++;
-        speakNext();
-      };
-
-      utterance.onerror = (e) => {
-        console.error('SpeechSynthesis error:', e);
-        setIsPlaying(false);
-      };
-
-      window.speechSynthesis.speak(utterance);
-      
-      // Periodic resume trick to prevent Chrome engine spin-downs during background play
-      const keepAliveInterval = setInterval(() => {
-        if (!window.speechSynthesis.speaking) {
-          clearInterval(keepAliveInterval);
-        } else {
-          window.speechSynthesis.resume();
-        }
-      }, 10000);
-    };
-
-    speakNext();
+    setIsPaused(false);
+    isPausedRef.current = false;
+    
+    setTimeout(() => {
+      speakCurrent();
+    }, 50);
   };
+
+  // Instantly apply settings modifications during active speech
+  useEffect(() => {
+    if (isPlaying && !isPaused) {
+      speakCurrent();
+    }
+  }, [speechRate, selectedVoiceURI]);
 
   return (
     <div className="max-w-4xl mx-auto p-2">

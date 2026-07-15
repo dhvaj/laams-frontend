@@ -718,27 +718,38 @@ export const AdaptiveLesson: React.FC = () => {
     if (!('speechSynthesis' in window)) return;
     
     const loadVoices = () => {
-      const allVoices = window.speechSynthesis.getVoices();
-      setVoicesList(allVoices);
-      
-      // Default to Indian English or Hindi if possible
-      const isHindi = i18n.language === 'hi';
-      let defaultVoice = null;
-      if (isHindi) {
-        defaultVoice = allVoices.find(v => v.lang.startsWith('hi-IN') || v.lang.startsWith('hi'));
-      } else {
-        defaultVoice = allVoices.find(v => v.lang.startsWith('en-IN') || v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('indian'));
-      }
-      if (defaultVoice) {
-        setSelectedVoiceURI(defaultVoice.voiceURI);
-      } else if (allVoices.length > 0) {
-        setSelectedVoiceURI(allVoices[0].voiceURI);
+      try {
+        if (typeof window.speechSynthesis.getVoices !== 'function') return;
+        const allVoices = window.speechSynthesis.getVoices() || [];
+        setVoicesList(allVoices);
+        
+        // Default to Indian English or Hindi if possible
+        const isHindi = i18n.language === 'hi';
+        let defaultVoice = null;
+        if (isHindi) {
+          defaultVoice = allVoices.find(v => v.lang && (v.lang.startsWith('hi-IN') || v.lang.startsWith('hi')));
+        } else {
+          defaultVoice = allVoices.find(v => v.lang && (v.lang.startsWith('en-IN') || v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('indian')));
+        }
+        if (defaultVoice) {
+          setSelectedVoiceURI(defaultVoice.voiceURI);
+        } else if (allVoices.length > 0) {
+          setSelectedVoiceURI(allVoices[0].voiceURI);
+        }
+      } catch (err) {
+        console.warn('SpeechSynthesis getVoices failed:', err);
       }
     };
 
     loadVoices();
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
+    try {
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+      } else {
+        window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
+      }
+    } catch (err) {
+      console.warn('SpeechSynthesis onvoiceschanged bind failed:', err);
     }
   }, [i18n.language]);
 
@@ -868,40 +879,46 @@ export const AdaptiveLesson: React.FC = () => {
 
   const speakCurrent = () => {
     if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
+    try {
+      window.speechSynthesis.cancel();
 
-    const sentences = sentencesRef.current;
-    const currentIndex = currentSentenceIndexRef.current;
+      const sentences = sentencesRef.current;
+      const currentIndex = currentSentenceIndexRef.current;
 
-    if (currentIndex >= sentences.length) {
-      setIsPlaying(false);
-      setIsPaused(false);
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(sentences[currentIndex]);
-    const voices = window.speechSynthesis.getVoices();
-    const selectedVoice = voices.find(v => v.voiceURI === selectedVoiceURIRef.current);
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-    }
-    utterance.rate = speechRateRef.current;
-
-    utterance.onend = () => {
-      if (isPausedRef.current) return;
-      currentSentenceIndexRef.current += 1;
-      speakCurrent();
-    };
-
-    utterance.onerror = (e) => {
-      console.error('SpeechSynthesis error:', e);
-      if (isPlayingRef.current && e.error !== 'interrupted') {
+      if (currentIndex >= sentences.length) {
         setIsPlaying(false);
         setIsPaused(false);
+        return;
       }
-    };
 
-    window.speechSynthesis.speak(utterance);
+      const utterance = new SpeechSynthesisUtterance(sentences[currentIndex]);
+      const voices = window.speechSynthesis.getVoices() || [];
+      const selectedVoice = voices.find(v => v.voiceURI === selectedVoiceURIRef.current);
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+      utterance.rate = speechRateRef.current;
+
+      utterance.onend = () => {
+        if (isPausedRef.current) return;
+        currentSentenceIndexRef.current += 1;
+        speakCurrent();
+      };
+
+      utterance.onerror = (e) => {
+        console.error('SpeechSynthesis error:', e);
+        if (isPlayingRef.current && e.error !== 'interrupted') {
+          setIsPlaying(false);
+          setIsPaused(false);
+        }
+      };
+
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      console.error('speakCurrent failed:', err);
+      setIsPlaying(false);
+      setIsPaused(false);
+    }
   };
 
   const handlePauseResume = () => {

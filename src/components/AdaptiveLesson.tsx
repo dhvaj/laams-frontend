@@ -723,11 +723,13 @@ export const AdaptiveLesson: React.FC = () => {
         const allVoices = window.speechSynthesis.getVoices() || [];
         
         // Map to a clean, serializable array of objects to avoid React native-object reconciliation crash
-        const serializableVoices = allVoices.map(v => ({
-          name: v.name || '',
-          lang: v.lang || '',
-          voiceURI: v.voiceURI || ''
-        }));
+        const serializableVoices = (allVoices || [])
+          .filter(v => v && typeof v === 'object')
+          .map(v => ({
+            name: v.name || '',
+            lang: v.lang || '',
+            voiceURI: v.voiceURI || ''
+          }));
         
         setVoicesList(serializableVoices);
         
@@ -956,7 +958,7 @@ export const AdaptiveLesson: React.FC = () => {
       return;
     }
 
-    const speechText = (adaptedLesson.blocks as AdaptedLessonBlock[])
+    const speechText = ((adaptedLesson.blocks || []) as AdaptedLessonBlock[])
       .flatMap((block: AdaptedLessonBlock) => [block.heading, block.text, ...(block.items || [])])
       .filter(Boolean)
       .join('. ');
@@ -1079,11 +1081,11 @@ export const AdaptiveLesson: React.FC = () => {
                 onChange={e => setSelectedVoiceURI(e.target.value)}
                 className="w-full px-3 py-2 text-xs font-semibold border theme-border rounded-xl bg-gray-50 dark:bg-gray-900 theme-text focus:outline-none cursor-pointer"
               >
-                {voicesList.length === 0 ? (
+                {(voicesList || []).length === 0 ? (
                   <option value="">No system voices found</option>
                 ) : (
-                  voicesList.map(v => (
-                    <option key={v.voiceURI} value={v.voiceURI}>
+                  (voicesList || []).map((v, index) => (
+                    <option key={`${v.voiceURI}-${index}`} value={v.voiceURI}>
                       {v.name} ({v.lang})
                     </option>
                   ))
@@ -1456,7 +1458,7 @@ export const AdaptiveLesson: React.FC = () => {
             </div>
           );
         })() : (
-          adaptedLesson.blocks.map((block: AdaptedLessonBlock) => (
+          (adaptedLesson.blocks || []).map((block: AdaptedLessonBlock) => (
             <BlockRenderer key={block.id} block={block} vocabulary={adaptedLesson.vocabulary || lesson.vocabulary || []} compact={isSimpleLayout} />
           ))
         )}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { ChevronRight, Play, Volume2, Download, Sparkles, BookOpen, RefreshCw, Headphones, Award, VolumeX, Music } from 'lucide-react';
+import { ChevronRight, Play, Volume2, Download, Sparkles, BookOpen, RefreshCw, Headphones, Award, VolumeX, Music, Pause, Settings } from 'lucide-react';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 import { useAuth } from '../contexts/AuthContext';
 import { adaptiveLearningService } from '../services/adaptiveLearning.service';
@@ -609,6 +609,11 @@ export const AdaptiveLesson: React.FC = () => {
   const { i18n } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [showSpeechSettings, setShowSpeechSettings] = useState(false);
+  const [speechRate, setSpeechRate] = useState(1.0);
+  const [selectedVoiceURI, setSelectedVoiceURI] = useState<string>('');
+  const [voicesList, setVoicesList] = useState<SpeechSynthesisVoice[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
   const [focusSound, setFocusSound] = useState<'off' | 'brown' | 'rain' | 'ocean'>('off');
@@ -681,6 +686,35 @@ export const AdaptiveLesson: React.FC = () => {
       }
     };
   }, [adaptedLesson]);
+
+  // Load speechSynthesis voices list
+  useEffect(() => {
+    if (!('speechSynthesis' in window)) return;
+    
+    const loadVoices = () => {
+      const allVoices = window.speechSynthesis.getVoices();
+      setVoicesList(allVoices);
+      
+      // Default to Indian English or Hindi if possible
+      const isHindi = i18n.language === 'hi';
+      let defaultVoice = null;
+      if (isHindi) {
+        defaultVoice = allVoices.find(v => v.lang.startsWith('hi-IN') || v.lang.startsWith('hi'));
+      } else {
+        defaultVoice = allVoices.find(v => v.lang.startsWith('en-IN') || v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('indian'));
+      }
+      if (defaultVoice) {
+        setSelectedVoiceURI(defaultVoice.voiceURI);
+      } else if (allVoices.length > 0) {
+        setSelectedVoiceURI(allVoices[0].voiceURI);
+      }
+    };
+
+    loadVoices();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+  }, [i18n.language]);
 
   // Reset step counter when accessibility profile changes
   useEffect(() => {
@@ -806,6 +840,17 @@ export const AdaptiveLesson: React.FC = () => {
   const isSimpleLayout = adaptedLesson.layout === 'simple-picture-first' && !isStepLayout;
   const showReadAloud = true; // Survey feedback: make read-aloud options available to all learners
 
+  const handlePauseResume = () => {
+    if (!('speechSynthesis' in window) || !isPlaying) return;
+    if (isPaused) {
+      window.speechSynthesis.resume();
+      setIsPaused(false);
+    } else {
+      window.speechSynthesis.pause();
+      setIsPaused(true);
+    }
+  };
+
   const handleReadAloud = () => {
     if (!('speechSynthesis' in window)) {
       alert("Text-to-speech is not supported in this browser.");
@@ -840,16 +885,11 @@ export const AdaptiveLesson: React.FC = () => {
 
       const utterance = new SpeechSynthesisUtterance(sentences[currentIndex]);
       const voices = window.speechSynthesis.getVoices();
-      const isHindi = i18n.language === 'hi';
-      let selectedVoice = null;
-      if (isHindi) {
-        selectedVoice = voices.find(v => v.lang.startsWith('hi-IN') || v.lang.startsWith('hi')) || null;
-      } else {
-        selectedVoice = voices.find(v => v.lang.startsWith('en-IN') || v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('indian')) || null;
-      }
+      const selectedVoice = voices.find(v => v.voiceURI === selectedVoiceURI);
       if (selectedVoice) {
         utterance.voice = selectedVoice;
       }
+      utterance.rate = speechRate;
 
       utterance.onend = () => {
         currentIndex++;
@@ -920,22 +960,86 @@ export const AdaptiveLesson: React.FC = () => {
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-3">
+          <div className="flex items-center justify-end gap-2 flex-wrap">
             {showReadAloud && (
-              <button
-                onClick={handleReadAloud}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition-all duration-300 cursor-pointer ${
-                  isPlaying 
-                    ? 'bg-red-500 text-white shadow-md shadow-red-500/20 hover:bg-red-600' 
-                    : 'bg-primary/10 text-primary hover:bg-primary/20'
-                }`}
-              >
-                {isPlaying ? <VolumeX className="w-5 h-5" aria-hidden="true" /> : <Volume2 className="w-5 h-5" aria-hidden="true" />}
-                {isPlaying ? 'Stop Reading' : 'Read Aloud'}
-              </button>
+              <>
+                <button
+                  onClick={handleReadAloud}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition-all duration-300 cursor-pointer text-sm shadow-sm ${
+                    isPlaying 
+                      ? 'bg-red-500 text-white hover:bg-red-600 shadow-red-500/20' 
+                      : 'bg-primary/10 text-primary hover:bg-primary/20'
+                  }`}
+                  title={isPlaying ? 'Stop Speech' : 'Start Speech'}
+                >
+                  {isPlaying ? <VolumeX className="w-4 h-4" aria-hidden="true" /> : <Volume2 className="w-4 h-4" aria-hidden="true" />}
+                  {isPlaying ? 'Stop' : 'Read Aloud'}
+                </button>
+                {isPlaying && (
+                  <button
+                    onClick={handlePauseResume}
+                    className="flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-bold transition-all text-sm cursor-pointer shadow-sm shadow-amber-500/20"
+                    title={isPaused ? 'Resume Speech' : 'Pause Speech'}
+                  >
+                    {isPaused ? <Play className="w-4 h-4" aria-hidden="true" /> : <Pause className="w-4 h-4" aria-hidden="true" />}
+                    {isPaused ? 'Resume' : 'Pause'}
+                  </button>
+                )}
+                <button
+                  onClick={() => setShowSpeechSettings(value => !value)}
+                  className={`p-2 rounded-lg border theme-border transition-colors flex items-center justify-center cursor-pointer ${
+                    showSpeechSettings 
+                      ? 'bg-primary text-white border-primary' 
+                      : 'theme-text hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                  title="Speech Settings"
+                >
+                  <Settings className="w-4 h-4" aria-hidden="true" />
+                </button>
+              </>
             )}
           </div>
         </div>
+
+        {/* Speech Configuration Drawer */}
+        {showSpeechSettings && showReadAloud && (
+          <div className="w-full mt-4 pt-4 border-t theme-border grid grid-cols-1 md:grid-cols-2 gap-4 animate-scale-up">
+            <div className="space-y-1.5">
+              <label htmlFor="tts-voice" className="block text-[10px] font-bold theme-text-muted uppercase tracking-wider">Voice Selector</label>
+              <select
+                id="tts-voice"
+                value={selectedVoiceURI}
+                onChange={e => setSelectedVoiceURI(e.target.value)}
+                className="w-full px-3 py-2 text-xs font-semibold border theme-border rounded-xl bg-gray-50 dark:bg-gray-900 theme-text focus:outline-none cursor-pointer"
+              >
+                {voicesList.length === 0 ? (
+                  <option value="">No system voices found</option>
+                ) : (
+                  voicesList.map(v => (
+                    <option key={v.voiceURI} value={v.voiceURI}>
+                      {v.name} ({v.lang})
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label htmlFor="tts-speed" className="block text-[10px] font-bold theme-text-muted uppercase tracking-wider">Speaking Speed ({speechRate}x)</label>
+              <select
+                id="tts-speed"
+                value={speechRate}
+                onChange={e => setSpeechRate(parseFloat(e.target.value))}
+                className="w-full px-3 py-2 text-xs font-semibold border theme-border rounded-xl bg-gray-50 dark:bg-gray-900 theme-text focus:outline-none cursor-pointer"
+              >
+                <option value="0.75">0.75x (Slow)</option>
+                <option value="1.0">1.0x (Normal)</option>
+                <option value="1.2">1.2x (Medium)</option>
+                <option value="1.5">1.5x (Fast)</option>
+                <option value="2.0">2.0x (Very Fast)</option>
+              </select>
+            </div>
+          </div>
+        )}
       </div>
 
       <article className={`theme-surface p-8 border theme-border transition-all duration-500 ease-in-out ${isSimpleLayout ? 'text-center space-y-12' : 'space-y-8'}`}>

@@ -868,6 +868,15 @@ export const AdaptiveLesson: React.FC = () => {
     };
   }, [lesson]);
 
+  // Keep hook order stable while the lesson is loading. This must run before
+  // the loading return below; otherwise React sees an extra hook once the
+  // adapted content arrives and unmounts the page.
+  useEffect(() => {
+    if (isPlaying && !isPaused) {
+      speakCurrent();
+    }
+  }, [speechRate, selectedVoiceURI]);
+
   if (!adaptedLesson || !lesson) {
     return <div className="p-8 text-center text-primary animate-pulse flex flex-col items-center justify-center gap-4 h-64"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div><p className="font-bold">Adapting content for {profileLabels[profile]} profile...</p></div>;
   }
@@ -977,13 +986,6 @@ export const AdaptiveLesson: React.FC = () => {
       speakCurrent();
     }, 50);
   };
-
-  // Instantly apply settings modifications during active speech
-  useEffect(() => {
-    if (isPlaying && !isPaused) {
-      speakCurrent();
-    }
-  }, [speechRate, selectedVoiceURI]);
 
   return (
     <div className="max-w-4xl mx-auto p-2">

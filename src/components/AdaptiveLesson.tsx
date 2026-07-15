@@ -608,7 +608,7 @@ export const AdaptiveLesson: React.FC = () => {
   const { user } = useAuth();
   const { i18n } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
-  const [showTrace, setShowTrace] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
   const [focusSound, setFocusSound] = useState<'off' | 'brown' | 'rain' | 'ocean'>('off');
@@ -672,6 +672,15 @@ export const AdaptiveLesson: React.FC = () => {
   useEffect(() => {
     setIsFlipped(false);
   }, [currentStep]);
+
+  // Stop speaking when component unmounts or lesson changes
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [adaptedLesson]);
 
   // Reset step counter when accessibility profile changes
   useEffect(() => {
@@ -798,33 +807,73 @@ export const AdaptiveLesson: React.FC = () => {
   const showReadAloud = true; // Survey feedback: make read-aloud options available to all learners
 
   const handleReadAloud = () => {
+    if (!('speechSynthesis' in window)) {
+      alert("Text-to-speech is not supported in this browser.");
+      return;
+    }
+
+    if (isPlaying) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+      return;
+    }
+
     const speechText = (adaptedLesson.blocks as AdaptedLessonBlock[])
       .flatMap((block: AdaptedLessonBlock) => [block.heading, block.text, ...(block.items || [])])
       .filter(Boolean)
       .join('. ');
 
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(speechText);
+    if (!speechText.trim()) return;
+
+    window.speechSynthesis.cancel();
+    
+    // Split into sentences to prevent the browser/Chrome 15s timeout speaking bug
+    const sentences = speechText.split(/[.!?]+\s+/).filter(Boolean);
+    let currentIndex = 0;
+    setIsPlaying(true);
+
+    const speakNext = () => {
+      if (currentIndex >= sentences.length) {
+        setIsPlaying(false);
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(sentences[currentIndex]);
       const voices = window.speechSynthesis.getVoices();
-      let selectedVoice = null;
-      
       const isHindi = i18n.language === 'hi';
+      let selectedVoice = null;
       if (isHindi) {
-        // Find Hindi voice
         selectedVoice = voices.find(v => v.lang.startsWith('hi-IN') || v.lang.startsWith('hi')) || null;
       } else {
-        // Find Indian English voice
         selectedVoice = voices.find(v => v.lang.startsWith('en-IN') || v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('indian')) || null;
       }
-      
       if (selectedVoice) {
         utterance.voice = selectedVoice;
-        console.log('Selected Indian TTS Voice:', selectedVoice.name, selectedVoice.lang);
       }
-      
+
+      utterance.onend = () => {
+        currentIndex++;
+        speakNext();
+      };
+
+      utterance.onerror = (e) => {
+        console.error('SpeechSynthesis error:', e);
+        setIsPlaying(false);
+      };
+
       window.speechSynthesis.speak(utterance);
-    }
+      
+      // Periodic resume trick to prevent Chrome engine spin-downs during background play
+      const keepAliveInterval = setInterval(() => {
+        if (!window.speechSynthesis.speaking) {
+          clearInterval(keepAliveInterval);
+        } else {
+          window.speechSynthesis.resume();
+        }
+      }, 10000);
+    };
+
+    speakNext();
   };
 
   return (
@@ -875,18 +924,16 @@ export const AdaptiveLesson: React.FC = () => {
             {showReadAloud && (
               <button
                 onClick={handleReadAloud}
-                className="flex items-center gap-2 bg-primary/10 text-primary hover:bg-primary/20 px-4 py-2 rounded-lg font-bold transition-colors"
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition-all duration-300 cursor-pointer ${
+                  isPlaying 
+                    ? 'bg-red-500 text-white shadow-md shadow-red-500/20 hover:bg-red-600' 
+                    : 'bg-primary/10 text-primary hover:bg-primary/20'
+                }`}
               >
-                <Volume2 className="w-5 h-5" aria-hidden="true" />
-                Read Aloud
+                {isPlaying ? <VolumeX className="w-5 h-5" aria-hidden="true" /> : <Volume2 className="w-5 h-5" aria-hidden="true" />}
+                {isPlaying ? 'Stop Reading' : 'Read Aloud'}
               </button>
             )}
-            <button
-              onClick={() => setShowTrace(value => !value)}
-              className="px-4 py-2 rounded-lg border theme-border theme-text font-bold hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            >
-              Engine Trace
-            </button>
           </div>
         </div>
       </div>
@@ -1272,33 +1319,7 @@ export const AdaptiveLesson: React.FC = () => {
         </section>
       )}
 
-      {showTrace && (
-        <section className="mt-6 theme-surface border theme-border p-6">
-          <h2 className="text-lg font-bold theme-text mb-4">Engine Trace</h2>
-          <dl className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-            <div>
-              <dt className="font-bold theme-text">Source Segments</dt>
-              <dd className="theme-text-muted">{adaptedLesson.trace.sourceSegments}</dd>
-            </div>
-            <div>
-              <dt className="font-bold theme-text">Output Blocks</dt>
-              <dd className="theme-text-muted">{adaptedLesson.trace.outputBlocks}</dd>
-            </div>
-            <div>
-              <dt className="font-bold theme-text">Complexity</dt>
-              <dd className="theme-text-muted capitalize">{adaptedLesson.complexity}</dd>
-            </div>
-          </dl>
-          <ul className="mt-4 space-y-2 text-sm theme-text">
-            {adaptedLesson.trace.operations.map((operation: string) => (
-              <li key={operation} className="flex gap-2">
-                <span className="text-primary font-bold" aria-hidden="true">-</span>
-                <span>{operation}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+
     </div>
   );
 };

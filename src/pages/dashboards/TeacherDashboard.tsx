@@ -285,7 +285,7 @@ const ClassRosterView = () => {
         </div>
       </div>
 
-      <div className="theme-surface border theme-border rounded-2xl overflow-hidden shadow-sm bg-white dark:bg-gray-900/50">
+      <div className="theme-surface border theme-border rounded-2xl overflow-hidden shadow-sm">
         {loading ? (
            <div className="p-12 text-center text-primary animate-pulse flex flex-col items-center"><Loader className="animate-spin mb-4" /> Loading roster...</div>
         ) : students.length === 0 ? (
@@ -502,7 +502,7 @@ const ContentHub = () => {
           <p className="theme-text-muted text-sm font-medium">Create interactive assignments, post study materials, or upload textbook media to feed the adaptive parser.</p>
         </div>
 
-        <div className="theme-surface border theme-border p-8 rounded-2xl shadow-sm relative overflow-hidden bg-white dark:bg-gray-900/50">
+        <div className="theme-surface border theme-border p-8 rounded-2xl shadow-sm relative overflow-hidden">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-12 h-12 bg-gradient-premium rounded-xl flex items-center justify-center text-white shadow-md shadow-primary/20">
               <FileText className="w-6 h-6" aria-hidden="true" />
@@ -748,7 +748,7 @@ const ContentHub = () => {
         </div>
 
         {/* Manage Content Section */}
-        <div className="theme-surface border theme-border p-8 rounded-2xl shadow-sm bg-white dark:bg-gray-900/50">
+        <div className="theme-surface border theme-border p-8 rounded-2xl shadow-sm">
           <h2 className="text-xl font-bold theme-text tracking-tight mb-6">Manage Existing Content</h2>
           <div className="grid grid-cols-1 gap-4">
             {[...books.map(b => ({...b, type: 'book'})), ...studyMaterials.map(s => ({...s, type: 'study'}))].map(item => (
@@ -1013,7 +1013,7 @@ const ExamsHub = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-        <div className="lg:col-span-3 theme-surface border theme-border p-8 rounded-2xl shadow-sm h-fit bg-white dark:bg-gray-900/50">
+        <div className="lg:col-span-3 theme-surface border theme-border p-8 rounded-2xl shadow-sm h-fit">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-12 h-12 bg-gradient-premium rounded-xl flex items-center justify-center text-white shadow-md shadow-primary/20">
               <GraduationCap className="w-6 h-6" aria-hidden="true" />
@@ -1395,7 +1395,7 @@ const ExamsHub = () => {
           </form>
         </div>
 
-        <div className="lg:col-span-2 theme-surface border theme-border p-6 rounded-2xl shadow-sm h-fit bg-white dark:bg-gray-900/50">
+        <div className="lg:col-span-2 theme-surface border theme-border p-6 rounded-2xl shadow-sm h-fit">
           <h2 className="text-lg font-bold theme-text tracking-tight mb-6 flex items-center gap-2"><Calendar className="w-5 h-5 text-primary" /> Scheduled Exams</h2>
           {exams.length === 0 ? (
             <p className="text-sm theme-text-muted text-center py-6 border border-dashed theme-border rounded-xl">No exams scheduled yet.</p>
@@ -1516,7 +1516,7 @@ const AssignmentsReview = () => {
                     {submissions.map(sub => {
                       const avatarGradient = getAvatarGradient(sub.first_name, sub.last_name);
                       return (
-                        <div key={sub.student_id} className="p-5 border theme-border rounded-2xl bg-white dark:bg-gray-900/50 shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/20">
+                        <div key={sub.student_id} className="p-5 border theme-border rounded-2xl theme-surface shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/20">
                           <div className="flex flex-wrap gap-4 justify-between items-start mb-4">
                             <div className="flex items-center gap-3">
                               <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${avatarGradient} flex items-center justify-center font-bold text-sm uppercase shadow-inner`}>

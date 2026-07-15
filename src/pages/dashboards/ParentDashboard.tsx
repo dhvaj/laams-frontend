@@ -73,7 +73,7 @@ const Overview = () => {
       </div>
       
       {/* Student Overview Header Card */}
-      <div className="card-premium theme-surface p-8 border theme-border rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden bg-white dark:bg-gray-900/50">
+      <div className="card-premium theme-surface p-8 border theme-border rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
         
         <div className="flex items-center gap-6">
@@ -104,7 +104,7 @@ const Overview = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Recent Performance Card */}
-        <div className="theme-surface border theme-border p-6 rounded-2xl bg-white dark:bg-gray-900/50 shadow-sm flex flex-col justify-between">
+        <div className="theme-surface border theme-border p-6 rounded-2xl shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40 rounded-xl text-emerald-600 dark:text-emerald-400">
@@ -139,7 +139,7 @@ const Overview = () => {
         </div>
 
         {/* Upcoming Due Dates Card */}
-        <div className="theme-surface border theme-border p-6 rounded-2xl bg-white dark:bg-gray-900/50 shadow-sm flex flex-col justify-between">
+        <div className="theme-surface border theme-border p-6 rounded-2xl shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2.5 bg-sky-50 dark:bg-sky-950/20 border border-sky-100 dark:border-sky-900/40 rounded-xl text-sky-600 dark:text-sky-400">
@@ -177,7 +177,7 @@ const Overview = () => {
       </div>
 
       {/* Notifications Section */}
-      <div className="theme-surface border theme-border p-6 rounded-2xl bg-white dark:bg-gray-900/50 shadow-sm transition-all duration-300">
+      <div className="theme-surface border theme-border p-6 rounded-2xl shadow-sm transition-all duration-300">
         <div className="flex justify-between items-center mb-6 border-b theme-border pb-4">
           <div>
             <h3 className="font-bold theme-text text-lg tracking-tight flex items-center gap-2">
@@ -274,7 +274,7 @@ const Progress = () => {
         <p className="theme-text-muted text-sm font-medium">Review detailed child grading, teachers notes, homework submissions, and average exams data.</p>
       </div>
       
-      <div className="theme-surface border theme-border p-8 rounded-2xl bg-white dark:bg-gray-900/50 shadow-sm">
+      <div className="theme-surface border theme-border p-8 rounded-2xl shadow-sm">
         <h2 className="text-xl font-bold theme-text mb-6 tracking-tight flex items-center gap-2"><Award className="w-5 h-5 text-primary" /> Subject Breakdown</h2>
         
         {loading ? (
@@ -329,7 +329,7 @@ const CalendarPage = () => {
         <p className="theme-text-muted text-sm font-medium">Keep track of dates and events relating to child course workloads.</p>
       </div>
 
-      <div className="theme-surface border theme-border overflow-hidden rounded-2xl bg-white dark:bg-gray-900/50 shadow-sm">
+      <div className="theme-surface border theme-border overflow-hidden rounded-2xl shadow-sm">
         <div className="p-4.5 border-b theme-border bg-gray-50/50 dark:bg-gray-800/30 flex justify-between items-center">
           <span className="font-bold theme-text text-sm">Target Deadlines</span>
           <span className="text-xs bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full font-bold">This Week</span>
@@ -379,7 +379,7 @@ const Messages = () => {
         <p className="theme-text-muted text-sm font-medium">Direct live contact logs between parents and educators.</p>
       </div>
 
-      <div className="theme-surface border theme-border flex-1 rounded-2xl flex flex-col overflow-hidden bg-white dark:bg-gray-900/50 shadow-sm">
+      <div className="theme-surface border theme-border flex-1 rounded-2xl flex flex-col overflow-hidden shadow-sm">
         {/* Chat Header */}
         <div className="p-4.5 border-b theme-border bg-gray-50/50 dark:bg-gray-800/30 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -416,7 +416,7 @@ const Messages = () => {
         </div>
 
         {/* Input box */}
-        <div className="p-4 border-t theme-border bg-white dark:bg-gray-900/80">
+        <div className="p-4 border-t theme-border theme-header-bg">
           <form onSubmit={handleSend} className="flex gap-3 items-center">
             <div className="focus-glow rounded-xl border theme-border transition-all flex-1">
               <input 

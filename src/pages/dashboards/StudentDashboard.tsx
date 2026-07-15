@@ -1827,7 +1827,7 @@ const Settings = () => {
             </div>
           </div>
 
-          <div className="theme-surface p-6 rounded-2xl border theme-border bg-white dark:bg-gray-900/50 shadow-sm">
+          <div className="theme-surface p-6 rounded-2xl border theme-border shadow-sm">
             <div className="flex items-center gap-3 mb-6 border-b theme-border pb-4">
               <Globe className="w-5 h-5 text-primary" aria-hidden="true" />
               <h2 className="text-lg font-bold theme-text tracking-tight">{t('preferred_lang') || 'Language Settings'}</h2>
@@ -1909,7 +1909,7 @@ const LessonsList = () => {
       </div>
 
       {loading ? (
-        <div className="p-16 text-center text-primary animate-pulse flex flex-col items-center justify-center gap-4 h-64 bg-white dark:bg-gray-900/50 border theme-border rounded-2xl">
+        <div className="p-16 text-center text-primary animate-pulse flex flex-col items-center justify-center gap-4 h-64 border theme-border rounded-2xl theme-surface">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
           <p className="font-bold text-sm">Loading course roadmap...</p>
         </div>
@@ -1919,7 +1919,7 @@ const LessonsList = () => {
             <Link 
               key={lesson.id} 
               to={`/dashboard/lessons/${lesson.slug}`} 
-              className="theme-surface p-6 rounded-2xl border theme-border hover:border-primary/20 bg-white dark:bg-gray-900/50 hover:-translate-y-1 transition-all shadow-sm block group"
+              className="theme-surface p-6 rounded-2xl border theme-border hover:border-primary/20 hover:-translate-y-1 transition-all shadow-sm block group"
             >
               <span className="text-[10px] font-black uppercase tracking-wider text-primary bg-primary/10 border border-primary/10 px-2.5 py-0.5 rounded-full mb-3.5 inline-block">
                 {lesson.subject}
@@ -1934,7 +1934,7 @@ const LessonsList = () => {
               <Link 
                 key={m.id} 
                 to={`/dashboard/lessons/${m.id}`} 
-                className="theme-surface p-6 rounded-2xl border theme-border hover:border-primary/20 bg-white dark:bg-gray-900/50 hover:-translate-y-1 transition-all shadow-sm block group"
+                className="theme-surface p-6 rounded-2xl border theme-border hover:border-primary/20 hover:-translate-y-1 transition-all shadow-sm block group"
               >
                 <div className="flex justify-between items-start gap-2 mb-3.5">
                   <span className="text-[10px] font-black uppercase tracking-wider text-primary bg-primary/10 border border-primary/10 px-2.5 py-0.5 rounded-full inline-block">

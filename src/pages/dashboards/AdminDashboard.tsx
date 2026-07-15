@@ -1065,7 +1065,7 @@ const Compliance = () => {
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="theme-surface border theme-border p-8 rounded-2xl bg-white dark:bg-gray-900/50 shadow-sm flex flex-col justify-between">
+        <div className="theme-surface border theme-border p-8 rounded-2xl shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-4 mb-6">
               <div className="w-16 h-16 rounded-2xl bg-gradient-premium/10 text-primary flex items-center justify-center text-3xl font-black shadow-inner border border-primary/15">
@@ -1096,7 +1096,7 @@ const Compliance = () => {
           </div>
         </div>
 
-        <div className="theme-surface border theme-border p-8 rounded-2xl bg-white dark:bg-gray-900/50 shadow-sm flex flex-col justify-between">
+        <div className="theme-surface border theme-border p-8 rounded-2xl shadow-sm flex flex-col justify-between">
           <div>
             <h2 className="text-xl font-bold theme-text mb-6 tracking-tight flex items-center gap-2">
               <Users className="w-5 h-5 text-primary" />
@@ -1197,7 +1197,7 @@ const ClassManagement = () => {
         </button>
       </div>
 
-      <div className="theme-surface border theme-border rounded-2xl bg-white dark:bg-gray-900/50 shadow-sm overflow-hidden">
+      <div className="theme-surface border theme-border rounded-2xl shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-16 text-center text-primary animate-pulse flex flex-col items-center"><span className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mb-3"></span>Loading class registries...</div>
         ) : (

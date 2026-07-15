@@ -240,7 +240,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Main Content Area */}
       <main id="main-content" className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-        <header className="h-16 sticky top-0 z-40 bg-white/80 dark:bg-gray-900/85 backdrop-blur-md border-b theme-border flex items-center justify-between px-6 shadow-sm">
+        <header className="h-16 sticky top-0 z-40 theme-header-bg backdrop-blur-md border-b theme-border flex items-center justify-between px-6 shadow-sm">
           <div className="md:hidden flex items-center gap-2">
             <button 
               onClick={() => setIsMobileMenuOpen(true)}

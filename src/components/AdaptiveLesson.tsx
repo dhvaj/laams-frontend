@@ -597,10 +597,55 @@ const startSynthFocusSound = (type: 'brown' | 'rain' | 'ocean') => {
 
     source.start();
     currentSource = source;
-  } catch (e) {
+} catch (e) {
     console.error(e);
   }
 };
+
+class LocalErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: Error | null; errorInfo: any }
+> {
+  constructor(props: any) {
+    super(props);
+    this.state = { hasError: false, error: null, errorInfo: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: any) {
+    console.error("LocalErrorBoundary caught an error", error, errorInfo);
+    this.setState({ errorInfo });
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-8 bg-white dark:bg-slate-900 border-2 border-red-500 rounded-3xl max-w-2xl mx-auto my-12 space-y-4 shadow-2xl">
+          <h2 className="text-2xl font-black text-red-600 dark:text-red-400">Something went wrong</h2>
+          <p className="text-slate-700 dark:text-slate-300 font-bold text-sm">The learning page crashed during rendering. Below is the error detail:</p>
+          <div className="bg-red-50 dark:bg-red-950/30 p-4 rounded-xl border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-300 font-mono text-xs overflow-auto max-h-60 space-y-2">
+            <p className="font-bold">{this.state.error?.toString()}</p>
+            <pre className="whitespace-pre-wrap">{this.state.error?.stack}</pre>
+            {this.state.errorInfo && (
+              <pre className="whitespace-pre-wrap">{JSON.stringify(this.state.errorInfo)}</pre>
+            )}
+          </div>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-sm transition-colors text-sm cursor-pointer"
+          >
+            Reload Page
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 export const AdaptiveLesson: React.FC = () => {
   const { id } = useParams();
@@ -734,7 +779,7 @@ export const AdaptiveLesson: React.FC = () => {
         setVoicesList(serializableVoices);
         
         // Default to Indian English or Hindi if possible
-        const isHindi = i18n.language === 'hi';
+        const isHindi = i18n?.language === 'hi';
         let defaultVoice = null;
         if (isHindi) {
           defaultVoice = serializableVoices.find(v => v.lang && (v.lang.startsWith('hi-IN') || v.lang.startsWith('hi')));
@@ -761,7 +806,7 @@ export const AdaptiveLesson: React.FC = () => {
     } catch (err) {
       console.warn('SpeechSynthesis onvoiceschanged bind failed:', err);
     }
-  }, [i18n.language]);
+  }, [i18n?.language]);
 
   // Reset step counter when accessibility profile changes
   useEffect(() => {
@@ -988,7 +1033,8 @@ export const AdaptiveLesson: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-2">
+    <LocalErrorBoundary>
+      <div className="max-w-4xl mx-auto p-2">
       <div className="mb-8 p-6 bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
         <div className="space-y-1">
           <h2 className="font-bold text-primary text-lg tracking-tight">Adaptive Learning Engine</h2>
@@ -1495,6 +1541,7 @@ export const AdaptiveLesson: React.FC = () => {
       )}
 
 
-    </div>
+      </div>
+    </LocalErrorBoundary>
   );
 };

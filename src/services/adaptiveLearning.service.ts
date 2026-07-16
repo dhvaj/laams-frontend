@@ -53,6 +53,12 @@ const rules: Record<AccessibilityProfile, {
     complexity: 'guided',
     summary: 'Low-distraction step flow with one concept visible at a time.',
     operations: ['Split lesson into sequential steps', 'Reduced visual density', 'Added progress indicator']
+  },
+  learning: {
+    layout: 'bulleted-high-spacing',
+    complexity: 'simplified',
+    summary: 'Simplified structures, high spacing, and conceptual clarity to support learning disabilities.',
+    operations: ['Converted complex concepts to bulleted items', 'Reduced sentence length', 'Applied high line-height spacing']
   }
 };
 
@@ -259,6 +265,7 @@ export const adaptiveLearningService = {
         blocks = createDeafBlocks(lesson);
         break;
       case 'dyslexic':
+      case 'learning':
         blocks = createDyslexicBlocks(lesson);
         break;
       case 'id':

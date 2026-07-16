@@ -16,7 +16,8 @@ const profileLabels: Record<string, string> = {
   deaf: 'Deaf / Hard of Hearing',
   dyslexic: 'Dyslexic',
   id: 'Intellectual Disability',
-  'adhd-autism': 'ADHD / Autism'
+  'adhd-autism': 'ADHD / Autism',
+  learning: 'Learning Disability'
 };
 
 const renderTextWithVocabulary = (text: string, vocabulary: { word: string; definition: string }[]) => {
@@ -929,12 +930,13 @@ export const AdaptiveLesson: React.FC = () => {
   const isStepLayout = 
     profile === 'adhd-autism' || 
     profile === 'dyslexic' || 
+    profile === 'learning' || 
     profile === 'id';
 
   const stepBlocks = (adaptedLesson.blocks || []).filter((block: any) => {
     if (profile === 'adhd-autism') return block.type === 'step';
     if (profile === 'id') return block.type === 'media' || block.type === 'bullets';
-    if (profile === 'dyslexic') return block.type === 'bullets' || block.type === 'markdown';
+    if (profile === 'dyslexic' || profile === 'learning') return block.type === 'bullets' || block.type === 'markdown';
     return false;
   });
   const activeStep = stepBlocks[currentStep];

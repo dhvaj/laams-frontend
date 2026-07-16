@@ -8,7 +8,8 @@ export type AccessibilityProfile =
   | 'deaf'
   | 'dyslexic'
   | 'id'
-  | 'adhd-autism';
+  | 'adhd-autism'
+  | 'learning';
 
 export type FontSize = 'normal' | 'large' | 'x-large';
 export type FontFamily = 'standard' | 'dyslexic' | 'legible';

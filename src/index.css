@@ -156,11 +156,46 @@ body.a11y-low-vision span { font-size: 1.35rem !important; font-weight: 700 !imp
 
 /* Accessibility Profile: Dyslexic (Base overrides if font not manually set) */
 body.a11y-dyslexic {
-  --letter-spacing: 0.1em;
-  --line-height: 1.8;
+  --letter-spacing: 0.12em;
+  --line-height: 1.9;
   /* Strip some aesthetics to reduce distraction */
   --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --card-border: #e5e7eb;
+}
+
+body.a11y-dyslexic,
+body.a11y-dyslexic p,
+body.a11y-dyslexic span,
+body.a11y-dyslexic li,
+body.a11y-dyslexic h1,
+body.a11y-dyslexic h2,
+body.a11y-dyslexic h3,
+body.a11y-dyslexic h4,
+body.a11y-dyslexic article,
+body.a11y-dyslexic section,
+body.a11y-dyslexic div {
+  font-family: 'Lexend', 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.9 !important;
+  word-spacing: 0.18em !important;
+}
+
+/* Accessibility Profile: Learning Disability (High Legibility layout) */
+body.a11y-learning,
+body.a11y-learning p,
+body.a11y-learning span,
+body.a11y-learning li,
+body.a11y-learning h1,
+body.a11y-learning h2,
+body.a11y-learning h3,
+body.a11y-learning h4,
+body.a11y-learning article,
+body.a11y-learning section,
+body.a11y-learning div {
+  font-family: 'Lexend', 'Comic Sans MS', sans-serif !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1.8 !important;
+  word-spacing: 0.12em !important;
 }
 
 /* Accessibility Profile: ADHD / Autism (Gamified, Engaging Theme for Kids) */
@@ -177,6 +212,25 @@ body.a11y-adhd-autism {
   --card-border: #a5b4fc;
   --glass-bg: rgba(255, 255, 255, 0.85);
   --glass-border: rgba(99, 102, 241, 0.2);
+}
+
+body.a11y-adhd-autism .theme-bg {
+  background-color: var(--bg-color) !important;
+}
+
+body.a11y-adhd-autism .theme-surface {
+  background-color: var(--surface-color) !important;
+  box-shadow: var(--card-shadow) !important;
+  border-radius: var(--card-radius) !important;
+  border: 1px solid var(--card-border) !important;
+}
+
+body.a11y-adhd-autism .theme-text {
+  color: var(--text-color) !important;
+}
+
+body.a11y-adhd-autism .theme-text-muted {
+  color: var(--text-muted) !important;
 }
 
 /* Focus indicator override for all elements in low-vision mode */

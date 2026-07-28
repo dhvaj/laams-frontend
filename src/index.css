@@ -89,20 +89,70 @@ input:not([type="radio"]):not([type="checkbox"]):-webkit-autofill:focus {
 /* Accessibility Profile: Low Vision (High Contrast Fallback) */
 body.a11y-low-vision {
   --bg-color: #000000;
-  --surface-color: #111111;
-  --header-bg: #1a1a1a;
+  --surface-color: #000000;
+  --header-bg: #000000;
   --text-color: #ffff00;
-  --text-muted: #cccc00;
+  --text-muted: #ffff00;
   --border-color: #ffff00;
   --focus-ring-color: #ff0000;
   
   /* Strip Aesthetics for Accessibility */
   --card-shadow: none;
-  --card-radius: 0.25rem;
+  --card-radius: 0px;
   --card-border: #ffff00;
-  --glass-bg: #1a1a1a;
+  --glass-bg: #000000;
   --glass-border: #ffff00;
+
+  font-size: 1.35rem !important;
+  line-height: 1.8 !important;
+  letter-spacing: 0.05em !important;
 }
+
+/* Force high-contrast yellow-on-black theme globally for low-vision profile */
+body.a11y-low-vision,
+body.a11y-low-vision #main-content,
+body.a11y-low-vision main,
+body.a11y-low-vision article,
+body.a11y-low-vision section,
+body.a11y-low-vision div,
+body.a11y-low-vision p,
+body.a11y-low-vision span,
+body.a11y-low-vision h1,
+body.a11y-low-vision h2,
+body.a11y-low-vision h3,
+body.a11y-low-vision li,
+body.a11y-low-vision button,
+body.a11y-low-vision aside {
+  background-color: #000000 !important;
+  color: #ffff00 !important;
+  border-color: #ffff00 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+body.a11y-low-vision a,
+body.a11y-low-vision a * {
+  color: #00ffff !important; /* High contrast cyan for links */
+  text-decoration: underline !important;
+}
+
+body.a11y-low-vision button,
+body.a11y-low-vision input,
+body.a11y-low-vision select,
+body.a11y-low-vision textarea {
+  border: 3px solid #ffff00 !important;
+  background: #000000 !important;
+  color: #ffff00 !important;
+  font-weight: 900 !important;
+  border-radius: 0px !important;
+}
+
+body.a11y-low-vision h1 { font-size: 2.5rem !important; font-weight: 900 !important; }
+body.a11y-low-vision h2 { font-size: 2rem !important; font-weight: 900 !important; }
+body.a11y-low-vision h3 { font-size: 1.6rem !important; font-weight: 900 !important; }
+body.a11y-low-vision p, 
+body.a11y-low-vision li,
+body.a11y-low-vision span { font-size: 1.35rem !important; font-weight: 700 !important; }
 
 /* Accessibility Profile: Dyslexic (Base overrides if font not manually set) */
 body.a11y-dyslexic {

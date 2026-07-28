@@ -396,7 +396,13 @@ const ContentHub = () => {
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
         const newFiles = Array.from(e.dataTransfer.files);
         if (formData.contentType === 'book') {
-          setFiles([newFiles[0]]);
+          const file = newFiles[0];
+          const ext = file.name.split('.').pop()?.toLowerCase();
+          if (ext === 'doc') {
+            alert('Legacy Word (.doc) files are not supported for Books. Please save your file as a modern Word Document (.docx) in Microsoft Word before uploading.');
+            return;
+          }
+          setFiles([file]);
         } else {
           setFiles(prev => [...prev, ...newFiles]);
         }
@@ -407,7 +413,13 @@ const ContentHub = () => {
       if (e.target.files && e.target.files.length > 0) {
         const newFiles = Array.from(e.target.files);
         if (formData.contentType === 'book') {
-          setFiles([newFiles[0]]);
+          const file = newFiles[0];
+          const ext = file.name.split('.').pop()?.toLowerCase();
+          if (ext === 'doc') {
+            alert('Legacy Word (.doc) files are not supported for Books. Please save your file as a modern Word Document (.docx) in Microsoft Word before uploading.');
+            return;
+          }
+          setFiles([file]);
         } else {
           setFiles(prev => [...prev, ...newFiles]);
         }
@@ -684,7 +696,7 @@ const ContentHub = () => {
                     type="file" 
                     ref={fileInputRef}
                     required={formData.contentType === 'book' && files.length === 0}
-                    accept={formData.contentType === 'book' ? '.docx,.epub,.pdf' : '.pdf,.doc,.docx,image/*,video/*'}
+                    accept={formData.contentType === 'book' ? '.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.doc,application/msword,.epub,application/epub+zip,.pdf,application/pdf' : '.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*,video/*'}
                     onChange={handleFileChange}
                     multiple={formData.contentType !== 'book'}
                     className="hidden"
@@ -1186,7 +1198,7 @@ const ExamsHub = () => {
                         setExamFile(e.target.files[0]);
                       }
                     }}
-                    accept=".pdf,.docx,.txt,.epub"
+                    accept=".pdf,application/pdf,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt,text/plain,.epub,application/epub+zip"
                     className="hidden"
                   />
                   <button

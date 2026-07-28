@@ -1639,7 +1639,7 @@ const Skills = () => {
 };
 
 const Settings = () => {
-  const { profile, setProfile, fontSize, setFontSize, fontFamily, setFontFamily } = useAccessibility();
+  const { profile, setProfile, fontSize, setFontSize, fontFamily, setFontFamily, contrast, setContrast } = useAccessibility();
   const { user } = useAuth();
   const { t, i18n } = useTranslation();
 
@@ -1874,6 +1874,24 @@ const Settings = () => {
                   <option value="x-large">Extra Large Text</option>
                 </select>
               </div>
+
+              {profile === 'low-vision' && (
+                <div>
+                  <label htmlFor="settings-contrast" className="block text-[10px] font-bold theme-text-muted mb-1.5 uppercase tracking-wide">Color Contrast</label>
+                  <select 
+                    id="settings-contrast"
+                    value={contrast} 
+                    onChange={(e) => setContrast(e.target.value as any)}
+                    className="w-full px-4 py-2.5 rounded-xl border theme-border bg-white dark:bg-gray-900 theme-text font-bold shadow-sm focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none cursor-pointer text-xs"
+                  >
+                    <option value="yellow-on-black">Yellow text on Black canvas</option>
+                    <option value="white-on-black">White text on Black canvas</option>
+                    <option value="black-on-yellow">Black text on Yellow canvas</option>
+                    <option value="blue-on-yellow">Blue text on Yellow canvas</option>
+                    <option value="green-on-black">Green text on Black canvas</option>
+                  </select>
+                </div>
+              )}
             </div>
           </div>
         </div>

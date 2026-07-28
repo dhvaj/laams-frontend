@@ -13,6 +13,7 @@ export type AccessibilityProfile =
 
 export type FontSize = 'normal' | 'large' | 'x-large';
 export type FontFamily = 'standard' | 'dyslexic' | 'legible';
+export type ContrastOption = 'yellow-on-black' | 'white-on-black' | 'black-on-yellow' | 'blue-on-yellow' | 'green-on-black';
 
 interface AccessibilityContextType {
   profile: AccessibilityProfile;
@@ -21,6 +22,8 @@ interface AccessibilityContextType {
   setFontSize: (size: FontSize) => void;
   fontFamily: FontFamily;
   setFontFamily: (font: FontFamily) => void;
+  contrast: ContrastOption;
+  setContrast: (contrast: ContrastOption) => void;
 }
 
 const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
@@ -30,6 +33,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   const [profile, setProfile] = useState<AccessibilityProfile>('typical');
   const [fontSize, setFontSize] = useState<FontSize>('normal');
   const [fontFamily, setFontFamily] = useState<FontFamily>('standard');
+  const [contrast, setContrast] = useState<ContrastOption>('yellow-on-black');
 
   const [announcement, setAnnouncement] = useState<string>('');
 
@@ -47,9 +51,11 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const savedFontSize = localStorage.getItem('laams-a11y-fontsize') as FontSize;
     const savedFontFamily = localStorage.getItem('laams-a11y-fontfamily') as FontFamily;
+    const savedContrast = localStorage.getItem('laams-a11y-contrast') as ContrastOption;
     
     if (savedFontSize) setFontSize(savedFontSize);
     if (savedFontFamily) setFontFamily(savedFontFamily);
+    if (savedContrast) setContrast(savedContrast);
   }, []);
 
   // Sync profile effects (e.g., setting default fonts for specific profiles if user hasn't overridden them)
@@ -75,6 +81,14 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     body.classList.remove(...profileClasses);
     body.classList.add(`a11y-${profile}`);
     localStorage.setItem('laams-a11y-profile', profile);
+
+    // Apply Contrast Class for Low Vision
+    const contrastClasses = ['lv-yellow-on-black', 'lv-white-on-black', 'lv-black-on-yellow', 'lv-blue-on-yellow', 'lv-green-on-black'];
+    body.classList.remove(...contrastClasses);
+    if (profile === 'low-vision') {
+      body.classList.add(`lv-${contrast}`);
+    }
+    localStorage.setItem('laams-a11y-contrast', contrast);
     
     // 2. Apply Font Size
     let sizeValue = '100%';
@@ -93,7 +107,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     root.style.setProperty('--font-family-base', fontValue);
     localStorage.setItem('laams-a11y-fontfamily', fontFamily);
 
-  }, [profile, fontSize, fontFamily]);
+  }, [profile, fontSize, fontFamily, contrast]);
 
   const setProfileWithAnnouncement = (newProfile: AccessibilityProfile) => {
     setProfile(newProfile);
@@ -110,11 +124,17 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     setAnnouncement(`Font type changed to ${newFont}`);
   };
 
+  const setContrastWithAnnouncement = (newContrast: ContrastOption) => {
+    setContrast(newContrast);
+    setAnnouncement(`Color contrast changed to ${newContrast.replace(/-/g, ' ')}`);
+  };
+
   return (
     <AccessibilityContext.Provider value={{ 
       profile, setProfile: setProfileWithAnnouncement, 
       fontSize, setFontSize: setFontSizeWithAnnouncement, 
-      fontFamily, setFontFamily: setFontFamilyWithAnnouncement 
+      fontFamily, setFontFamily: setFontFamilyWithAnnouncement,
+      contrast, setContrast: setContrastWithAnnouncement
     }}>
       {children}
       <div 

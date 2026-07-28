@@ -108,41 +108,191 @@ body.a11y-low-vision {
   letter-spacing: 0.05em !important;
 }
 
-/* Force high-contrast yellow-on-black theme globally for low-vision profile */
+/* Force high-contrast theme variations globally for low-vision profile */
+
+/* 1. Yellow on Black contrast theme (Default) */
 body.a11y-low-vision,
-body.a11y-low-vision #main-content,
-body.a11y-low-vision main,
-body.a11y-low-vision article,
-body.a11y-low-vision section,
-body.a11y-low-vision div,
-body.a11y-low-vision p,
-body.a11y-low-vision span,
-body.a11y-low-vision h1,
-body.a11y-low-vision h2,
-body.a11y-low-vision h3,
-body.a11y-low-vision li,
-body.a11y-low-vision button,
-body.a11y-low-vision aside {
+body.a11y-low-vision.lv-yellow-on-black,
+body.a11y-low-vision.lv-yellow-on-black #main-content,
+body.a11y-low-vision.lv-yellow-on-black main,
+body.a11y-low-vision.lv-yellow-on-black article,
+body.a11y-low-vision.lv-yellow-on-black section,
+body.a11y-low-vision.lv-yellow-on-black div,
+body.a11y-low-vision.lv-yellow-on-black p,
+body.a11y-low-vision.lv-yellow-on-black span,
+body.a11y-low-vision.lv-yellow-on-black h1,
+body.a11y-low-vision.lv-yellow-on-black h2,
+body.a11y-low-vision.lv-yellow-on-black h3,
+body.a11y-low-vision.lv-yellow-on-black li,
+body.a11y-low-vision.lv-yellow-on-black button,
+body.a11y-low-vision.lv-yellow-on-black aside {
   background-color: #000000 !important;
   color: #ffff00 !important;
   border-color: #ffff00 !important;
   box-shadow: none !important;
   text-shadow: none !important;
 }
-
-body.a11y-low-vision a,
-body.a11y-low-vision a * {
-  color: #00ffff !important; /* High contrast cyan for links */
+body.a11y-low-vision.lv-yellow-on-black a,
+body.a11y-low-vision.lv-yellow-on-black a * {
+  color: #00ffff !important;
   text-decoration: underline !important;
 }
-
-body.a11y-low-vision button,
-body.a11y-low-vision input,
-body.a11y-low-vision select,
-body.a11y-low-vision textarea {
+body.a11y-low-vision,
+body.a11y-low-vision.lv-yellow-on-black button,
+body.a11y-low-vision.lv-yellow-on-black input,
+body.a11y-low-vision.lv-yellow-on-black select,
+body.a11y-low-vision.lv-yellow-on-black textarea {
   border: 3px solid #ffff00 !important;
   background: #000000 !important;
   color: #ffff00 !important;
+  font-weight: 900 !important;
+  border-radius: 0px !important;
+}
+
+/* 2. White on Black contrast theme */
+body.a11y-low-vision.lv-white-on-black,
+body.a11y-low-vision.lv-white-on-black #main-content,
+body.a11y-low-vision.lv-white-on-black main,
+body.a11y-low-vision.lv-white-on-black article,
+body.a11y-low-vision.lv-white-on-black section,
+body.a11y-low-vision.lv-white-on-black div,
+body.a11y-low-vision.lv-white-on-black p,
+body.a11y-low-vision.lv-white-on-black span,
+body.a11y-low-vision.lv-white-on-black h1,
+body.a11y-low-vision.lv-white-on-black h2,
+body.a11y-low-vision.lv-white-on-black h3,
+body.a11y-low-vision.lv-white-on-black li,
+body.a11y-low-vision.lv-white-on-black button,
+body.a11y-low-vision.lv-white-on-black aside {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+body.a11y-low-vision.lv-white-on-black a,
+body.a11y-low-vision.lv-white-on-black a * {
+  color: #ffff00 !important;
+  text-decoration: underline !important;
+}
+body.a11y-low-vision.lv-white-on-black button,
+body.a11y-low-vision.lv-white-on-black input,
+body.a11y-low-vision.lv-white-on-black select,
+body.a11y-low-vision.lv-white-on-black textarea {
+  border: 3px solid #ffffff !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  border-radius: 0px !important;
+}
+
+/* 3. Black on Yellow contrast theme */
+body.a11y-low-vision.lv-black-on-yellow,
+body.a11y-low-vision.lv-black-on-yellow #main-content,
+body.a11y-low-vision.lv-black-on-yellow main,
+body.a11y-low-vision.lv-black-on-yellow article,
+body.a11y-low-vision.lv-black-on-yellow section,
+body.a11y-low-vision.lv-black-on-yellow div,
+body.a11y-low-vision.lv-black-on-yellow p,
+body.a11y-low-vision.lv-black-on-yellow span,
+body.a11y-low-vision.lv-black-on-yellow h1,
+body.a11y-low-vision.lv-black-on-yellow h2,
+body.a11y-low-vision.lv-black-on-yellow h3,
+body.a11y-low-vision.lv-black-on-yellow li,
+body.a11y-low-vision.lv-black-on-yellow button,
+body.a11y-low-vision.lv-black-on-yellow aside {
+  background-color: #ffff00 !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+body.a11y-low-vision.lv-black-on-yellow a,
+body.a11y-low-vision.lv-black-on-yellow a * {
+  color: #0000ff !important;
+  text-decoration: underline !important;
+}
+body.a11y-low-vision.lv-black-on-yellow button,
+body.a11y-low-vision.lv-black-on-yellow input,
+body.a11y-low-vision.lv-black-on-yellow select,
+body.a11y-low-vision.lv-black-on-yellow textarea {
+  border: 3px solid #000000 !important;
+  background: #ffff00 !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
+  border-radius: 0px !important;
+}
+
+/* 4. Blue on Yellow contrast theme */
+body.a11y-low-vision.lv-blue-on-yellow,
+body.a11y-low-vision.lv-blue-on-yellow #main-content,
+body.a11y-low-vision.lv-blue-on-yellow main,
+body.a11y-low-vision.lv-blue-on-yellow article,
+body.a11y-low-vision.lv-blue-on-yellow section,
+body.a11y-low-vision.lv-blue-on-yellow div,
+body.a11y-low-vision.lv-blue-on-yellow p,
+body.a11y-low-vision.lv-blue-on-yellow span,
+body.a11y-low-vision.lv-blue-on-yellow h1,
+body.a11y-low-vision.lv-blue-on-yellow h2,
+body.a11y-low-vision.lv-blue-on-yellow h3,
+body.a11y-low-vision.lv-blue-on-yellow li,
+body.a11y-low-vision.lv-blue-on-yellow button,
+body.a11y-low-vision.lv-blue-on-yellow aside {
+  background-color: #ffff00 !important;
+  color: #0000ff !important;
+  border-color: #0000ff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+body.a11y-low-vision.lv-blue-on-yellow a,
+body.a11y-low-vision.lv-blue-on-yellow a * {
+  color: #ff0000 !important;
+  text-decoration: underline !important;
+}
+body.a11y-low-vision.lv-blue-on-yellow button,
+body.a11y-low-vision.lv-blue-on-yellow input,
+body.a11y-low-vision.lv-blue-on-yellow select,
+body.a11y-low-vision.lv-blue-on-yellow textarea {
+  border: 3px solid #0000ff !important;
+  background: #ffff00 !important;
+  color: #0000ff !important;
+  font-weight: 900 !important;
+  border-radius: 0px !important;
+}
+
+/* 5. Green on Black contrast theme */
+body.a11y-low-vision.lv-green-on-black,
+body.a11y-low-vision.lv-green-on-black #main-content,
+body.a11y-low-vision.lv-green-on-black main,
+body.a11y-low-vision.lv-green-on-black article,
+body.a11y-low-vision.lv-green-on-black section,
+body.a11y-low-vision.lv-green-on-black div,
+body.a11y-low-vision.lv-green-on-black p,
+body.a11y-low-vision.lv-green-on-black span,
+body.a11y-low-vision.lv-green-on-black h1,
+body.a11y-low-vision.lv-green-on-black h2,
+body.a11y-low-vision.lv-green-on-black h3,
+body.a11y-low-vision.lv-green-on-black li,
+body.a11y-low-vision.lv-green-on-black button,
+body.a11y-low-vision.lv-green-on-black aside {
+  background-color: #000000 !important;
+  color: #00ff00 !important;
+  border-color: #00ff00 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+body.a11y-low-vision.lv-green-on-black a,
+body.a11y-low-vision.lv-green-on-black a * {
+  color: #ffff00 !important;
+  text-decoration: underline !important;
+}
+body.a11y-low-vision.lv-green-on-black button,
+body.a11y-low-vision.lv-green-on-black input,
+body.a11y-low-vision.lv-green-on-black select,
+body.a11y-low-vision.lv-green-on-black textarea {
+  border: 3px solid #00ff00 !important;
+  background: #000000 !important;
+  color: #00ff00 !important;
   font-weight: 900 !important;
   border-radius: 0px !important;
 }

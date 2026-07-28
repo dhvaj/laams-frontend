@@ -466,7 +466,7 @@ const ContentHub = () => {
             classId: formData.classId || '1'
           });
         } else if (formData.contentType === 'book') {
-          if (files.length === 0) throw new Error("A .docx, .epub, or .pdf file is required for Books.");
+          if (files.length === 0) throw new Error("A .docx, .epub, .pdf, or .zip file is required for Books.");
           await dashboardService.createBook({
             title: formData.title,
             subject: formData.subject,
@@ -696,7 +696,7 @@ const ContentHub = () => {
                     type="file" 
                     ref={fileInputRef}
                     required={formData.contentType === 'book' && files.length === 0}
-                    accept={formData.contentType === 'book' ? '.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.doc,application/msword,.epub,application/epub+zip,.pdf,application/pdf' : '.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*,video/*'}
+                    accept={formData.contentType === 'book' ? '.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.doc,application/msword,.epub,application/epub+zip,.pdf,application/pdf,.zip,application/zip,application/x-zip-compressed' : '.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*,video/*'}
                     onChange={handleFileChange}
                     multiple={formData.contentType !== 'book'}
                     className="hidden"

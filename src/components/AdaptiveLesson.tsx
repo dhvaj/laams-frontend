@@ -943,6 +943,44 @@ export const AdaptiveLesson: React.FC = () => {
   const isSimpleLayout = adaptedLesson.layout === 'simple-picture-first' && !isStepLayout;
   const showReadAloud = true; // Survey feedback: make read-aloud options available to all learners
 
+  const getFullFileUrl = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3001').trim();
+    const cleanUrl = url.startsWith('/') ? url : `/${url}`;
+    return `${API_URL}${cleanUrl}`;
+  };
+
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!lesson.fileUrl) return;
+
+    const fullUrl = getFullFileUrl(lesson.fileUrl);
+
+    try {
+      const res = await fetch(fullUrl);
+      if (!res.ok) throw new Error('Download failed');
+      const blob = await res.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      const filename = lesson.fileUrl.split('/').pop() || 'lesson-attachment';
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(blobUrl);
+
+      // Track download analytics
+      dashboardService.trackAnalyticsEvent(lesson.id, 'content_downloaded', 1, { fileName: lesson.fileUrl });
+    } catch (err) {
+      console.warn('Programmatic download failed, falling back to window.open:', err);
+      window.open(fullUrl, '_blank');
+      // Still track event on fallback
+      dashboardService.trackAnalyticsEvent(lesson.id, 'content_downloaded', 1, { fileName: lesson.fileUrl });
+    }
+  };
+
   const speakCurrent = () => {
     if (!('speechSynthesis' in window)) return;
     try {
@@ -1171,17 +1209,14 @@ export const AdaptiveLesson: React.FC = () => {
           </div>
           <div className="flex gap-3">
             {lesson.fileUrl && !lesson.fileUrl.match(/\.(mp4|webm|ogg|mov|m4v|avi|mkv)$/i) && (
-              <a 
-                href={`${(import.meta.env.VITE_API_URL || 'http://localhost:3001').trim()}${lesson.fileUrl}`} 
-                target="_blank" 
-                rel="noreferrer" 
-                onClick={() => dashboardService.trackAnalyticsEvent(lesson.id, 'content_downloaded', 1, { fileName: lesson.fileUrl })}
-                className="flex items-center gap-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 px-4 py-2 rounded-lg font-bold shadow-sm transition-colors" 
+              <button 
+                onClick={handleDownload}
+                className="flex items-center gap-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 px-4 py-2 rounded-lg font-bold shadow-sm transition-colors cursor-pointer" 
                 aria-label="Download Attachment"
               >
                 <Download className="w-5 h-5" aria-hidden="true" />
                 Attachment
-              </a>
+              </button>
             )}
             {profile === 'deaf' && (
               <button className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-bold shadow-sm" aria-label="Play sign language translation">
@@ -1196,7 +1231,7 @@ export const AdaptiveLesson: React.FC = () => {
           <div className="my-6 max-w-3xl mx-auto space-y-2">
             <h3 className="text-sm font-bold theme-text-muted uppercase tracking-wider">Lesson Video Material</h3>
             <video controls className="w-full rounded-2xl border theme-border shadow-lg bg-black aspect-video">
-              <source src={`${(import.meta.env.VITE_API_URL || 'http://localhost:3001').trim()}${lesson.fileUrl}`} type="video/mp4" />
+              <source src={getFullFileUrl(lesson.fileUrl)} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>

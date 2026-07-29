@@ -1,16 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, ArrowLeft, UserPlus, Loader2, ArrowRight, Check, GraduationCap, Users, Sparkles, Shield, Sliders, CheckSquare } from 'lucide-react';
+import { BookOpen, ArrowLeft, UserPlus, Loader2, ArrowRight, Check, GraduationCap, Users, Sparkles, Shield, Sliders, CheckSquare, Globe } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
+  const { t, i18n } = useTranslation();
   const [role, setRole] = useState<'student' | 'teacher'>('student');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [step, setStep] = useState(1);
+
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'hi', name: 'हिन्दी (Hindi)' },
+    { code: 'mr', name: 'मराठी (Marathi)' },
+    { code: 'bn', name: 'বাংলা (Bengali)' },
+    { code: 'te', name: 'తెలుగు (Telugu)' },
+    { code: 'ta', name: 'தமிழ் (Tamil)' },
+    { code: 'gu', name: 'ગુજરાતી (Gujarati)' },
+    { code: 'kn', name: 'ಕನ್ನಡ (Kannada)' },
+    { code: 'ml', name: 'മലയാളം (Malayalam)' },
+    { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)' }
+  ];
 
   // Common Fields
   const [firstName, setFirstName] = useState('');
@@ -193,6 +208,7 @@ export const Register: React.FC = () => {
       password,
       role,
       username: email ? email.split('@')[0] : `user_${mobile}`,
+      preferredLanguage: i18n.language
     };
 
     if (role === 'student') {
@@ -302,6 +318,25 @@ export const Register: React.FC = () => {
       {/* RIGHT PANEL: Spacious Form Area */}
       <section className="w-full lg:w-7/12 flex flex-col justify-center py-12 px-6 sm:px-12 xl:px-20 overflow-y-auto max-h-screen relative z-10 bg-gradient-to-br from-indigo-50/50 via-white to-purple-50/40 dark:from-slate-950 dark:via-slate-900/90 dark:to-indigo-950/40">
         
+        {/* Floating Language Switcher */}
+        <div className="absolute top-6 right-6 sm:right-12 z-20">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border theme-border rounded-xl shadow-sm">
+            <Globe className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
+            <select
+              value={i18n.language}
+              onChange={(e) => i18n.changeLanguage(e.target.value)}
+              className="bg-transparent text-xs font-bold theme-text focus:outline-none cursor-pointer border-none p-0 pr-6"
+              aria-label="Select System Language"
+            >
+              {languages.map((l) => (
+                <option key={l.code} value={l.code} className="theme-text bg-white dark:bg-slate-900">
+                  {l.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
         {/* Glow blobs for background aesthetic (visible on mobile too) */}
         <div className="absolute top-[10%] right-[-5%] w-96 h-96 rounded-full bg-primary/5 dark:bg-primary/10 blur-[100px] pointer-events-none"></div>
         <div className="absolute bottom-[10%] left-[-5%] w-96 h-96 rounded-full bg-indigo-500/5 dark:bg-indigo-500/10 blur-[100px] pointer-events-none"></div>

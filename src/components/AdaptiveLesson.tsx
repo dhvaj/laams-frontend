@@ -81,6 +81,14 @@ const renderBoldItalic = (text: string, vocabulary: any[]): React.ReactNode => {
   return renderInlineItalic(text, vocabulary);
 };
 
+const getFullFileUrl = (url: string) => {
+  if (!url) return '';
+  if (url.startsWith('http') || url.startsWith('data:')) return url;
+  const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3001').trim();
+  const cleanUrl = url.startsWith('/') ? url : `/${url}`;
+  return `${API_URL}${cleanUrl}`;
+};
+
 const renderInlineMarkdown = (text: string, vocabulary: any[]): React.ReactNode => {
   if (!text) return null;
   
@@ -98,8 +106,7 @@ const renderInlineMarkdown = (text: string, vocabulary: any[]): React.ReactNode 
             if (match) {
               const alt = match[1] || 'Image';
               const src = match[2];
-              const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3001').trim();
-              const fullSrc = src.startsWith('http') || src.startsWith('data:') ? src : `${API_URL}${src}`;
+              const fullSrc = getFullFileUrl(src);
               return (
                 <span key={index} className="block select-all my-3 max-w-sm mx-auto text-center">
                   <img 
@@ -429,7 +436,7 @@ const BlockRenderer: React.FC<{ block: AdaptedLessonBlock; vocabulary: { word: s
         {block.heading && <h2 className="text-2xl font-bold theme-text">{block.heading}</h2>}
         <div className="relative select-all max-w-2xl mx-auto">
           <img
-            src={block.media.url}
+            src={getFullFileUrl(block.media.url)}
             alt={block.media.alt}
             className={compact ? 'w-48 h-48 mx-auto rounded-full object-cover border-4 border-primary/30 shadow-xl' : 'w-full aspect-video rounded-lg object-cover border theme-border'}
           />
@@ -942,14 +949,6 @@ export const AdaptiveLesson: React.FC = () => {
   const activeStep = stepBlocks[currentStep];
   const isSimpleLayout = adaptedLesson.layout === 'simple-picture-first' && !isStepLayout;
   const showReadAloud = true; // Survey feedback: make read-aloud options available to all learners
-
-  const getFullFileUrl = (url: string) => {
-    if (!url) return '';
-    if (url.startsWith('http')) return url;
-    const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3001').trim();
-    const cleanUrl = url.startsWith('/') ? url : `/${url}`;
-    return `${API_URL}${cleanUrl}`;
-  };
 
   const handleDownload = async (e: React.MouseEvent) => {
     e.preventDefault();

@@ -1722,7 +1722,7 @@ const Settings = () => {
     }
   };
 
-  const showAllProfiles = user?.email === 'student@school.edu';
+  const showAllProfiles = user?.email === 'student@school.edu' || user?.email === 'demo@demo.com';
 
   const allowedProfiles = showAllProfiles
     ? Object.keys(profileLabels).map(id => ({ id, ...profileLabels[id] }))

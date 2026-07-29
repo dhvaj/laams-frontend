@@ -1085,7 +1085,7 @@ export const AdaptiveLesson: React.FC = () => {
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
           {/* Premium Segmented Toggle for Student adapted profile vs original */}
-          {user?.role === 'student' && user.profileId && user.profileId !== 'typical' && user.email !== 'student@school.edu' && (
+          {user?.role === 'student' && user.profileId && user.profileId !== 'typical' && user.email !== 'student@school.edu' && user.email !== 'demo@demo.com' && (
             <div className="flex p-1 bg-gray-200/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-300/40 dark:border-gray-700/40" role="radiogroup" aria-label="Content Adapt Mode">
               <button
                 role="radio"

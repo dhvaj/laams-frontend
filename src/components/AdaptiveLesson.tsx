@@ -1507,7 +1507,19 @@ export const AdaptiveLesson: React.FC = () => {
                     return (
                       <button
                         key={s.id}
-                        onClick={() => setFocusSound(s.id as any)}
+                        onClick={() => {
+                          try {
+                            if (!audioCtx) {
+                              audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+                            }
+                            if (audioCtx.state === 'suspended') {
+                              audioCtx.resume();
+                            }
+                          } catch (e) {
+                            console.warn('Failed to initialize AudioContext in click gesture:', e);
+                          }
+                          setFocusSound(s.id as any);
+                        }}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${
                           isSelected
                             ? 'bg-primary text-white shadow-md scale-105'

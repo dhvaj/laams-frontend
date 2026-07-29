@@ -896,7 +896,7 @@ export const AdaptiveLesson: React.FC = () => {
     setAdaptedLesson(null);
     loadContent();
     return () => { isMounted = false; };
-  }, [id, profile]);
+  }, [id, profile, i18n.language]);
 
   // Analytics - Track time spent on lesson
   useEffect(() => {

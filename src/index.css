@@ -304,6 +304,25 @@ body.a11y-low-vision p,
 body.a11y-low-vision li,
 body.a11y-low-vision span { font-size: 1.35rem !important; font-weight: 700 !important; }
 
+/* Image and illustration enhancements for Low-Vision clarity */
+body.a11y-low-vision img {
+  filter: contrast(1.3) brightness(1.1) !important;
+  border-width: 6px !important;
+  border-style: solid !important;
+  border-radius: 4px !important;
+  max-width: 100% !important;
+  height: auto !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+body.a11y-low-vision.lv-yellow-on-black img { border-color: #ffff00 !important; }
+body.a11y-low-vision img { border-color: #ffff00 !important; } /* default fallback */
+body.a11y-low-vision.lv-white-on-black img { border-color: #ffffff !important; }
+body.a11y-low-vision.lv-black-on-yellow img { border-color: #000000 !important; }
+body.a11y-low-vision.lv-blue-on-yellow img { border-color: #0000ff !important; }
+body.a11y-low-vision.lv-green-on-black img { border-color: #00ff00 !important; }
+
 /* Accessibility Profile: Dyslexic (Base overrides if font not manually set) */
 body.a11y-dyslexic {
   --letter-spacing: 0.12em;

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 export const Register: React.FC = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const [role, setRole] = useState<'student' | 'teacher'>('student');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { ChevronRight, Play, Volume2, Download, Sparkles, BookOpen, RefreshCw, Headphones, Award, VolumeX, Music, Pause, Settings } from 'lucide-react';
+import { ChevronRight, Play, Volume2, Download, Sparkles, BookOpen, RefreshCw, Headphones, Award, VolumeX, Music, Pause, Settings, Heart, CheckCircle2 } from 'lucide-react';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 import { useAuth } from '../contexts/AuthContext';
 import { adaptiveLearningService } from '../services/adaptiveLearning.service';
@@ -8,6 +8,8 @@ import { dashboardService } from '../services/dashboard.service';
 import { Tooltip } from './ui/Tooltip';
 import type { AdaptedLessonBlock } from '../types';
 import { useTranslation } from 'react-i18next';
+import { ParentCompanion } from './ParentCompanion';
+import api from '../lib/api';
 
 const profileLabels: Record<string, string> = {
   typical: 'Typical',
@@ -755,7 +757,64 @@ export const AdaptiveLesson: React.FC = () => {
   // Automatically reset card flip state when currentStep changes
   useEffect(() => {
     setIsFlipped(false);
+    setShowCheckpoint(false);
+    setCheckpointData(null);
+    setSelectedCheckpointOption(null);
+    setCheckpointFeedback(null);
   }, [currentStep]);
+
+  // --- 2-WAY PARENTAL CHECKPOINT STATE & HANDLERS ---
+  const [checkpointData, setCheckpointData] = useState<any>(null);
+  const [selectedCheckpointOption, setSelectedCheckpointOption] = useState<number | null>(null);
+  const [checkpointFeedback, setCheckpointFeedback] = useState<string | null>(null);
+  const [checkpointLoading, setCheckpointLoading] = useState(false);
+  const [showCheckpoint, setShowCheckpoint] = useState(false);
+
+  const loadCheckpoint = async () => {
+    setShowCheckpoint(true);
+    setCheckpointLoading(true);
+    setSelectedCheckpointOption(null);
+    setCheckpointFeedback(null);
+    try {
+      const activeBlock = stepBlocks[currentStep];
+      const cardText = activeBlock?.text || (activeBlock?.items || []).join(' ') || lesson?.title || '';
+      const res = await api.post('/api/companion/checkpoint', {
+        cardText,
+        profile,
+        persona: 'mom',
+        cardIndex: currentStep,
+        lang: i18n.language || 'en'
+      });
+      setCheckpointData(res.data);
+    } catch (err) {
+      console.warn("Failed to load parent checkpoint:", err);
+    } finally {
+      setCheckpointLoading(false);
+    }
+  };
+
+  const handleSelectCheckpointOption = async (index: number) => {
+    if (!checkpointData || selectedCheckpointOption !== null) return;
+    setSelectedCheckpointOption(index);
+    const opt = checkpointData.options?.[index];
+    if (opt) {
+      setCheckpointFeedback(opt.feedback || "Awesome job!");
+      playChime();
+      if (opt.correct) {
+        triggerBurst();
+      }
+      try {
+        await api.post('/api/companion/checkpoint-answer', {
+          checkpointId: checkpointData.id,
+          selectedOption: opt.label,
+          isCorrect: opt.correct,
+          lessonId: lesson?.id
+        });
+      } catch (err) {
+        console.warn("Failed to record checkpoint answer:", err);
+      }
+    }
+  };
 
   // Stop speaking when component unmounts or lesson changes
   useEffect(() => {
@@ -1534,6 +1593,85 @@ export const AdaptiveLesson: React.FC = () => {
                 </div>
               </div>
 
+              {/* 2-Way Parental Interactive Checkpoint */}
+              <div className="my-6">
+                {!showCheckpoint ? (
+                  <button
+                    onClick={loadCheckpoint}
+                    className="w-full py-3 px-4 rounded-2xl border-2 border-dashed border-primary/30 hover:border-primary bg-primary/5 hover:bg-primary/10 text-primary font-bold text-xs flex items-center justify-center gap-2 transition-all group shadow-2xs cursor-pointer"
+                  >
+                    <Heart className="w-4 h-4 text-pink-500 fill-pink-500/20 group-hover:scale-110 transition-transform" />
+                    <span>Check in with Mom/Dad on this card ✨ (+10 XP)</span>
+                  </button>
+                ) : (
+                  <div className="bg-gradient-to-br from-primary/5 via-indigo-50/50 to-purple-50/30 dark:from-slate-900/90 dark:via-indigo-950/20 dark:to-slate-900 border-2 border-primary/25 rounded-3xl p-5 shadow-md space-y-4 animate-scale-up">
+                    <div className="flex items-center justify-between border-b theme-border pb-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center shadow-xs">
+                          <Heart className="w-4 h-4 fill-white" />
+                        </div>
+                        <div>
+                          <h4 className="font-extrabold text-sm theme-text">
+                            {checkpointData?.title || "Parent Checkpoint"}
+                          </h4>
+                          <p className="text-[11px] theme-text-muted">
+                            Let's see how much we understood together!
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-xs font-bold text-amber-500 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-full border border-amber-200 dark:border-amber-800">
+                        +10 XP
+                      </span>
+                    </div>
+
+                    {checkpointLoading ? (
+                      <div className="flex items-center justify-center py-6 gap-2 text-xs theme-text-muted">
+                        <RefreshCw className="w-4 h-4 animate-spin text-primary" />
+                        <span>Mom/Dad is preparing a fun question...</span>
+                      </div>
+                    ) : checkpointData ? (
+                      <div className="space-y-3">
+                        <p className="text-sm font-semibold theme-text leading-relaxed">
+                          {checkpointData.prompt}
+                        </p>
+
+                        <div className="grid grid-cols-1 gap-2.5 pt-1">
+                          {checkpointData.options?.map((opt: any, idx: number) => {
+                            const isSelected = selectedCheckpointOption === idx;
+                            return (
+                              <button
+                                key={idx}
+                                onClick={() => handleSelectCheckpointOption(idx)}
+                                disabled={selectedCheckpointOption !== null}
+                                className={`w-full text-left p-3 rounded-2xl border text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
+                                  isSelected
+                                    ? opt.correct
+                                      ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-500 text-emerald-700 dark:text-emerald-300 shadow-sm'
+                                      : 'bg-amber-50 dark:bg-amber-950/30 border-amber-500 text-amber-700 dark:text-amber-300'
+                                    : 'bg-white dark:bg-slate-800 theme-border theme-text hover:border-primary/50'
+                                }`}
+                              >
+                                <span>{opt.label}</span>
+                                {isSelected && (
+                                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {checkpointFeedback && (
+                          <div className="mt-3 p-3 rounded-2xl bg-white dark:bg-slate-800 border theme-border text-xs font-semibold text-primary flex items-center gap-2 animate-scale-up">
+                            <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+                            <span>{checkpointFeedback}</span>
+                          </div>
+                        )}
+                      </div>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+
               {/* Navigation controls */}
               <div className="flex justify-between items-center border-t theme-border pt-6">
                 <button
@@ -1588,6 +1726,14 @@ export const AdaptiveLesson: React.FC = () => {
         </section>
       )}
 
+      {/* 2-Way Empathetic Parental Co-Learning Companion */}
+      {lesson && (
+        <ParentCompanion 
+          lessonTitle={lesson.title || ''}
+          currentCardText={activeStep?.text || (activeStep?.items || []).join(' ') || lesson.title || ''}
+          profile={profile}
+        />
+      )}
 
       </div>
     </LocalErrorBoundary>

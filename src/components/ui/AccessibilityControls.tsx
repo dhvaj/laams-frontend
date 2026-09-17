@@ -35,7 +35,7 @@ export const AccessibilityControls: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const isStudent = user?.role === 'student' && user?.email !== 'student@school.edu' && user?.email !== 'demo@demo.com';
+  const isStudent = user?.role === 'student' && user?.email !== 'student@school.edu' && !user?.email?.includes('demo');
   const defaultProfile = isStudent ? (user?.profileId || 'typical') : null;
 
   // Sync i18n with user's preferred language on load
@@ -136,6 +136,7 @@ export const AccessibilityControls: React.FC = () => {
                   <option value="dyslexic">Dyslexic</option>
                   <option value="id">Intellectual Disability</option>
                   <option value="adhd-autism">ADHD / Autism</option>
+                  <option value="learning">Learning Disability</option>
                 </>
               )}
             </select>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { BookOpen, LogIn, ArrowLeft, Loader2 } from 'lucide-react';
+import { BookOpen, LogIn, ArrowLeft, Loader2, Sparkles } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -241,6 +241,38 @@ export const Login: React.FC = () => {
                   {isSubmitting ? 'Signing in...' : 'Sign in'}
                 </Button>
               </div>
+
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t theme-border"></div>
+                </div>
+                <div className="relative flex justify-center text-[10px] uppercase">
+                  <span className="bg-white dark:bg-gray-900 px-3 theme-text-muted font-bold tracking-wider">
+                    Or Instant Demo Access
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={async () => {
+                  setEmail('demo@demo.com');
+                  setPassword('password123');
+                  setIsSubmitting(true);
+                  setError('');
+                  try {
+                    await login('demo@demo.com', 'password123');
+                    navigate('/dashboard');
+                  } catch (err: any) {
+                    setError(err.message || 'Login failed');
+                    setIsSubmitting(false);
+                  }
+                }}
+                className="w-full py-3 px-4 rounded-xl border-2 border-primary/40 bg-gradient-to-r from-primary/10 via-indigo-500/10 to-purple-500/10 hover:from-primary/20 hover:to-indigo-500/20 text-primary font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500/20" />
+                <span>🚀 Instant Demo Sign In (All Profiles Unlocked)</span>
+              </button>
             </form>
           )}
 
